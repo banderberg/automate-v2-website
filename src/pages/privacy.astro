@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy — AutoMate"
+  description="AutoMate's privacy policy: your car data stays on your device. No accounts, no ads, no ad tracking, no data selling."
+  path="/privacy/"
+>
+  <Nav />
+  <main id="main">
+    <article class="policy">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: May 15, 2026</p>
+
+      <p>
+        AutoMate is a car expense tracking app that keeps all your data on
+        your device. This policy explains what the app handles, how it
+        handles it, and what permissions it requests. This website itself
+        sets no cookies and runs no analytics or tracking scripts of any
+        kind — it's a static page.
+      </p>
+
+      <h2>Data Storage</h2>
+      <p>
+        All data you enter into AutoMate — vehicles, fuel logs, service
+        records, expenses, reminders, and settings — is stored locally on
+        your device in a SQLite database. Your data never leaves your device
+        unless you explicitly choose to export or back it up.
+      </p>
+      <p>
+        There is no cloud storage, no server, and no remote database.
+        AutoMate does not transmit any data over the internet, with one
+        exception: if you enter a VIN, the app sends that VIN to the free
+        NHTSA public API to look up your vehicle's year, make, and model. No
+        other data is sent.
+      </p>
+
+      <h2>Data Collection</h2>
+      <h3>Usage Analytics</h3>
+      <p>
+        AutoMate collects anonymous usage data (app opens, feature usage) via
+        Firebase Analytics to improve the app — no personally identifiable
+        information. You can disable this at any time in Settings → Privacy
+        → Share Usage Data.
+      </p>
+      <h3>Crash Reporting</h3>
+      <p>
+        AutoMate collects anonymous crash reports via Firebase Crashlytics
+        (stack traces, device/OS/app version) to maintain stability. No
+        personal information is included.
+      </p>
+      <h3>What We Don't Collect</h3>
+      <ul>
+        <li>No advertising SDKs or ad tracking</li>
+        <li>No user profiling or behavioral tracking</li>
+        <li>No cookies or web beacons</li>
+        <li>No data sold or shared with third parties</li>
+        <li>No personally identifiable information</li>
+      </ul>
+
+      <h2>Account Creation</h2>
+      <p>
+        AutoMate does not require or offer account creation. There is no
+        sign-up, no login, and no user account.
+      </p>
+
+      <h2>Advertising</h2>
+      <p>AutoMate contains no advertisements of any kind.</p>
+
+      <h2>Permissions</h2>
+      <p>
+        Each permission below is requested only when you take an action that
+        requires it — never on first launch or in the background.
+      </p>
+      <ul>
+        <li><strong>Camera</strong> — only when you photograph a receipt or vehicle.</li>
+        <li><strong>Photo Library</strong> — only when you pick an existing photo to attach.</li>
+        <li><strong>Location</strong> — only when you tap "Use current location" for a station or shop.</li>
+        <li><strong>Notifications</strong> — only after you create your first maintenance reminder; generated entirely on-device.</li>
+      </ul>
+
+      <h2>Data Export &amp; Backup</h2>
+      <p>
+        Export your data anytime as CSV, filterable by vehicle and date
+        range, shared through your device's standard share sheet. Backups
+        are entirely local and manual — there is no automatic cloud backup.
+      </p>
+
+      <h2>Children's Privacy</h2>
+      <p>AutoMate is not directed at children under 13 and does not knowingly collect information from children.</p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy or the app: <a href="mailto:arctos.built@gmail.com">arctos.built@gmail.com</a>
+      </p>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .policy {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
+  }
+  h1 {
+    font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .updated {
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-2xl);
+  }
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-sm);
+  }
+  p,
+  li {
+    color: var(--ink-secondary);
+  }
+  ul {
+    padding-left: 1.2rem;
+  }
+  li {
+    margin-bottom: var(--space-xs);
+  }
+  a {
+    color: var(--primary);
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,141 @@
+@import '@fontsource/archivo/500.css';
+@import '@fontsource/archivo/700.css';
+@import '@fontsource/archivo/800.css';
+@import '@fontsource/archivo/900.css';
+@import '@fontsource/public-sans/400.css';
+@import '@fontsource/public-sans/500.css';
+@import '@fontsource/public-sans/600.css';
+
+/*
+  Tokens mirror automate-v2/DESIGN.md verbatim for the accent + body-register
+  colors (this site is a sibling of the app, not a new brand). The `road`,
+  `road-line`, `sign-panel`, and `ticket-paper` tokens are new — the
+  night-highway hero/footer register — see this project's own DESIGN.md.
+*/
+:root {
+  /* body register (app's real light tokens) */
+  --surface: #f5f4f1;
+  --card: #fefdfb;
+  --divider: #e2e0db;
+  --divider-subtle: #f0efec;
+  --ink: #1c1b18;
+  --ink-secondary: #5c5a55;
+  --ink-muted: #706c67;
+
+  /* accent (identical hex to the app) */
+  --primary: #4272c4;
+  --primary-light: #dbe6f5;
+  --primary-dark: #1e3554;
+  --fuel: #1a9a8f;
+  --fuel-light: #d0f5ee;
+  --service: #e8772b;
+  --service-light: #fff3e6;
+  --expense: #2ead76;
+  --expense-light: #d5f2e3;
+  --destructive: #e05252;
+  --destructive-light: #fde8e8;
+
+  /* night-highway register */
+  --road: #0b0c0e;
+  --road-line: #3a3d42;
+  --sign-panel: #15171a;
+  --ticket-paper: #f5f4f1;
+
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, sans-serif;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+  --space-xl: 1.5rem;
+  --space-2xl: 2rem;
+  --space-3xl: 3rem;
+  --space-4xl: 5rem;
+
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* z-scale */
+  --z-sticky: 10;
+  --z-dropdown: 20;
+  --z-modal: 30;
+  --z-toast: 40;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+
+p {
+  text-wrap: pretty;
+  max-width: 65ch;
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

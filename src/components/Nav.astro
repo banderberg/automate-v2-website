@@ -1,0 +1,66 @@
+---
+import PlayStoreButton from './PlayStoreButton.astro';
+import { withBase } from '../lib/site';
+---
+
+<header class="nav">
+  <a class="brand" href={withBase('/')}>
+    <img src={withBase('/favicon.png')} alt="" width="28" height="28" />
+    <span>AutoMate</span>
+  </a>
+  <nav aria-label="Primary">
+    <a href={withBase('/#features')}>Features</a>
+    <a href={withBase('/#compare')}>Compare</a>
+    <a href={withBase('/#faq')}>FAQ</a>
+    <a href={withBase('/blog/')}>Blog</a>
+  </nav>
+  <PlayStoreButton variant="compact" />
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    padding: var(--space-lg) clamp(1.25rem, 4vw, 3rem);
+    background: color-mix(in srgb, var(--road) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--road-line);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    text-decoration: none;
+    color: var(--ticket-paper);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.15rem;
+  }
+  .brand img {
+    border-radius: 6px;
+  }
+  nav {
+    display: flex;
+    gap: var(--space-xl);
+  }
+  nav a {
+    color: var(--ticket-paper);
+    text-decoration: none;
+    font-size: 0.95rem;
+    opacity: 0.85;
+    transition: opacity 150ms var(--ease-out-quart);
+  }
+  nav a:hover {
+    opacity: 1;
+  }
+  @media (max-width: 640px) {
+    nav {
+      display: none;
+    }
+  }
+</style>

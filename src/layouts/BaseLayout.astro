@@ -1,0 +1,103 @@
+---
+import '../styles/global.css';
+import { withBase } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path from site root, e.g. "/" or "/blog/cost-per-mile" */
+  path: string;
+  /** Extra JSON-LD objects to emit alongside the site-wide SoftwareApplication schema */
+  structuredData?: Record<string, unknown>[];
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  path,
+  structuredData = [],
+  ogImage = '/og.png',
+} = Astro.props;
+
+const canonicalURL = new URL(withBase(path), Astro.site);
+const ogImageURL = new URL(withBase(ogImage), Astro.site);
+const homeURL = new URL(withBase('/'), Astro.site);
+
+const PLAY_STORE_URL =
+  'https://play.google.com/store/apps/details?id=com.arctosbuilt.automate';
+
+const softwareAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'AutoMate',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Android',
+  description:
+    'AutoMate is a car expense tracker for fuel, service, and other costs. No ads, no account required, fully offline.',
+  url: homeURL.toString(),
+  downloadUrl: PLAY_STORE_URL,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+
+const jsonLdBlocks = [softwareAppSchema, ...structuredData];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href={withBase('/favicon.png')} />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:site_name" content="AutoMate" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <meta name="theme-color" content="#0b0c0e" />
+
+    {jsonLdBlocks.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} is:inline />
+    ))}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--primary);
+    color: white;
+    padding: var(--space-sm) var(--space-lg);
+    z-index: var(--z-toast);
+    border-radius: 0 0 var(--radius-md) 0;
+  }
+  .skip-link:focus {
+    left: 0;
+  }
+</style>

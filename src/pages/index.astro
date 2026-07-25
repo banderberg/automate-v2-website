@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import SignPanels from '../components/SignPanels.astro';
+import MileMarkers from '../components/MileMarkers.astro';
+import Comparison from '../components/Comparison.astro';
+import PrivacyStatement from '../components/PrivacyStatement.astro';
+import Faq from '../components/Faq.astro';
+import Footer from '../components/Footer.astro';
+import { faqItems } from '../lib/content';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="AutoMate — Car Expense Tracker. Private, No Ads, No Account."
+  description="Know what your car actually costs. Track fuel, service & expenses in 15 seconds. No ads, no account, fully offline. Free on Google Play."
+  path="/"
+  structuredData={[faqSchema]}
+>
+  <Nav />
+  <main id="main">
+    <Hero />
+    <SignPanels />
+    <MileMarkers />
+    <Comparison />
+    <PrivacyStatement />
+    <Faq />
+  </main>
+  <Footer />
+</BaseLayout>

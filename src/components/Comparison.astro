@@ -1,0 +1,159 @@
+---
+import { comparisonRows } from '../lib/content';
+import { withBase } from '../lib/site';
+
+function renderCell(value: boolean | string) {
+  if (value === true) return { kind: 'yes', text: 'Yes' };
+  if (value === false) return { kind: 'no', text: 'No' };
+  return { kind: 'text', text: value };
+}
+---
+
+<section class="comparison" id="compare" aria-labelledby="compare-heading">
+  <div class="section-inner">
+    <h2 id="compare-heading">How AutoMate compares.</h2>
+    <p class="lede">
+      Sourced from our own competitive research, not marketing spin — see the
+      full breakdown in the app's <a href={withBase('/blog/automate-vs-fuelio-drivvo/')}>honest comparison post</a>.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption class="visually-hidden">Feature comparison between AutoMate, Fuelio, Drivvo, and Simply Auto</caption>
+        <thead>
+          <tr>
+            <th scope="col">Feature</th>
+            <th scope="col" class="highlight-col">AutoMate</th>
+            <th scope="col">Fuelio</th>
+            <th scope="col">Drivvo</th>
+            <th scope="col">Simply Auto</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            comparisonRows.map((row) => (
+              <tr>
+                <th scope="row">{row.feature}</th>
+                {[row.automate, row.fuelio, row.drivvo, row.simplyAuto].map((val, i) => {
+                  const cell = renderCell(val);
+                  return (
+                    <td class={i === 0 ? 'highlight-col' : ''} data-kind={cell.kind}>
+                      {cell.kind === 'yes' && (
+                        <>
+                          <span class="tick yes" aria-hidden="true">✓</span>
+                          <span class="visually-hidden">Yes</span>
+                        </>
+                      )}
+                      {cell.kind === 'no' && (
+                        <>
+                          <span class="tick no" aria-hidden="true">✕</span>
+                          <span class="visually-hidden">No</span>
+                        </>
+                      )}
+                      {cell.kind === 'text' && <span>{cell.text}</span>}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="fine-print">
+      Competitor details as of our research in {new Date().getFullYear()} — pricing and features change; verify current details on each app's own store listing.
+    </p>
+  </div>
+</section>
+
+<style>
+  .comparison {
+    background: var(--surface);
+    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
+  }
+  .section-inner {
+    max-width: 60rem;
+    margin: 0 auto;
+  }
+  h2 {
+    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+    font-weight: 700;
+    color: var(--ink);
+    text-align: center;
+  }
+  .lede {
+    color: var(--ink-secondary);
+    text-align: center;
+    margin: var(--space-md) auto var(--space-2xl);
+    max-width: 48ch;
+  }
+  .lede a {
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--divider);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    min-width: 40rem;
+  }
+  th,
+  td {
+    padding: var(--space-md) var(--space-lg);
+    text-align: left;
+    border-bottom: 1px solid var(--divider-subtle);
+    font-size: 0.9rem;
+  }
+  thead th {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    border-bottom: 1px solid var(--divider);
+  }
+  tbody th {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .highlight-col {
+    background: var(--primary-light);
+  }
+  thead .highlight-col {
+    background: color-mix(in srgb, var(--primary-light) 70%, var(--card));
+    color: var(--primary-dark);
+  }
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .tick {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .tick.yes {
+    background: var(--expense-light);
+    color: var(--expense);
+  }
+  .tick.no {
+    background: var(--destructive-light);
+    color: var(--destructive);
+  }
+  .fine-print {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-top: var(--space-lg);
+  }
+</style>

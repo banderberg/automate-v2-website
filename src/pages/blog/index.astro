@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { withBase } from '../../lib/site';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const dateFormat: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+---
+
+<BaseLayout
+  title="Blog — AutoMate"
+  description="Car cost math, honest app comparisons, and maintenance guidance from the team behind AutoMate."
+  path="/blog/"
+>
+  <Nav />
+  <main id="main">
+    <section class="blog-index">
+      <div class="section-inner">
+        <h1>The AutoMate Blog</h1>
+        <p class="lede">Car cost math, honest comparisons, and maintenance guidance.</p>
+        <ul class="post-list">
+          {
+            posts.map((post) => (
+              <li>
+                <a href={withBase(`/blog/${post.id}/`)}>
+                  <h2>{post.data.title}</h2>
+                  <p>{post.data.description}</p>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {post.data.pubDate.toLocaleDateString('en-US', dateFormat)}
+                  </time>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .blog-index {
+    background: var(--surface);
+    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
+    min-height: 60vh;
+  }
+  .section-inner {
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: clamp(2rem, 3vw + 1rem, 3rem);
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .lede {
+    color: var(--ink-secondary);
+    margin: var(--space-md) 0 var(--space-2xl);
+  }
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+  .post-list a {
+    display: block;
+    text-decoration: none;
+    background: var(--card);
+    border: 1px solid var(--divider);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: border-color 180ms var(--ease-out-quart);
+  }
+  .post-list a:hover {
+    border-color: var(--primary);
+  }
+  .post-list h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: var(--space-sm);
+  }
+  .post-list p {
+    color: var(--ink-secondary);
+    margin-bottom: var(--space-md);
+  }
+  .post-list time {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+  }
+</style>
