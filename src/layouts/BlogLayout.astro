@@ -1,182 +1,91 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import PlayStoreButton from '../components/PlayStoreButton.astro';
-import { withBase } from '../lib/site';
+import PlayLink from '../components/PlayLink.astro';
+import { PRICING_LINE } from '../lib/facts';
 
 interface Props {
   title: string;
   description: string;
-  path: string;
+  slug: string;
   pubDate: Date;
   updatedDate?: Date;
 }
 
-const { title, description, path, pubDate, updatedDate } = Astro.props;
+const { title, description, slug, pubDate, updatedDate } = Astro.props;
+const path = `/blog/${slug}/`;
+const site = Astro.site ?? new URL('https://automateapp.info');
 
-const articleSchema = {
+const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+const human = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+
+const article = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
+  '@type': 'BlogPosting',
   headline: title,
   description,
-  datePublished: pubDate.toISOString(),
-  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
-  author: { '@type': 'Person', name: 'AutoMate' },
+  datePublished: isoDay(pubDate),
+  dateModified: isoDay(updatedDate ?? pubDate),
+  mainEntityOfPage: new URL(path, site).toString(),
+  image: new URL(`/og/blog-${slug}.png`, site).toString(),
+  author: { '@type': 'Organization', name: 'AutoMate' },
+  publisher: { '@type': 'Organization', name: 'AutoMate', logo: new URL('/icon-192.png', site).toString() },
 };
-
-const dateFormat: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
 ---
 
-<BaseLayout title={`${title} — AutoMate Blog`} description={description} path={path} structuredData={[articleSchema]}>
-  <Nav />
-  <main id="main">
-    <article class="post">
-      <header class="post-header">
-        <a class="back-link" href={withBase('/blog/')}>← Blog</a>
-        <h1>{title}</h1>
-        <p class="post-meta">
-          <time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString('en-US', dateFormat)}</time>
-        </p>
-      </header>
-      <div class="post-body">
-        <slot />
-      </div>
-      <div class="post-cta">
-        <h2>Ready to know your own number?</h2>
-        <p>AutoMate tracks fuel, service, and expenses in 15 seconds. Free to start.</p>
-        <PlayStoreButton />
-      </div>
-    </article>
-  </main>
-  <Footer />
+<BaseLayout
+  title={`${title} | AutoMate`}
+  description={description}
+  path={path}
+  ogSlug={`blog-${slug}`}
+  ogType="article"
+  structuredData={[article]}
+  breadcrumbs={[
+    { name: 'Blog', path: '/blog/' },
+    { name: title, path },
+  ]}
+>
+  <article class="doc wrap">
+    <header class="doc-head">
+      <h1>{title}</h1>
+      <p class="muted post-date">
+        {
+          updatedDate ? (
+            <>
+              Updated <time datetime={isoDay(updatedDate)}>{human(updatedDate)}</time>
+            </>
+          ) : (
+            <time datetime={isoDay(pubDate)}>{human(pubDate)}</time>
+          )
+        }
+      </p>
+    </header>
+    <div class="doc-body">
+      <slot />
+    </div>
+    <aside class="post-cta" aria-label="Get AutoMate">
+      <p class="post-cta-title">Track your own numbers</p>
+      <p class="muted">AutoMate logs fuel, service and expenses on your Android phone. {PRICING_LINE}</p>
+      <PlayLink />
+    </aside>
+  </article>
 </BaseLayout>
 
 <style>
-  .post {
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
+  .post-date {
+    font-size: var(--text-sm);
   }
-  .back-link {
-    display: inline-block;
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: var(--space-lg);
-  }
-  .post-header h1 {
-    font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
-    font-weight: 800;
-    color: var(--ink);
-  }
-  .post-meta {
-    color: var(--ink-muted);
-    font-size: 0.9rem;
-    margin-top: var(--space-md);
-  }
-  .post-body {
-    margin-top: var(--space-2xl);
-    color: var(--ink-secondary);
-    font-size: 1.05rem;
-    line-height: 1.7;
-  }
-  .post-body :global(h2) {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-top: var(--space-2xl);
-    margin-bottom: var(--space-md);
-  }
-  .post-body :global(h3) {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-top: var(--space-xl);
-    margin-bottom: var(--space-sm);
-  }
-  .post-body :global(p) {
-    margin-bottom: var(--space-lg);
-    max-width: 68ch;
-  }
-  .post-body :global(ul),
-  .post-body :global(ol) {
-    margin-bottom: var(--space-lg);
-    padding-left: 1.3rem;
-  }
-  .post-body :global(li) {
-    margin-bottom: var(--space-xs);
-  }
-  .post-body :global(a) {
-    color: var(--primary);
-    font-weight: 600;
-  }
-  .post-body :global(strong) {
-    color: var(--ink);
-  }
-  .post-body :global(table) {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: var(--space-lg);
-    font-size: 0.95rem;
-  }
-  .post-body :global(th),
-  .post-body :global(td) {
-    border: 1px solid var(--divider);
-    padding: var(--space-sm) var(--space-md);
-    text-align: left;
-  }
-  .post-body :global(th) {
-    background: var(--card);
-    font-family: var(--font-display);
-  }
-  .post-body :global(blockquote) {
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
-    color: var(--ink-secondary);
-    font-style: italic;
-    margin: var(--space-lg) 0;
-  }
-  .post-body :global(code) {
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: 4px;
-    padding: 0.1em 0.35em;
-    font-size: 0.9em;
-  }
-  .post-body :global(pre) {
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
-    overflow-x: auto;
-    margin-bottom: var(--space-lg);
-  }
-  .post-body :global(pre code) {
-    background: none;
-    border: none;
-    padding: 0;
-  }
-
   .post-cta {
-    margin-top: var(--space-4xl);
-    padding: var(--space-2xl);
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius-lg);
-    text-align: center;
+    display: grid;
+    gap: var(--space-sm);
+    justify-items: start;
+    padding-top: var(--space-xl);
+    border-top: 2px solid var(--color-ink);
   }
-  .post-cta h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: var(--space-sm);
-  }
-  .post-cta p {
-    color: var(--ink-secondary);
-    margin-bottom: var(--space-lg);
+  .post-cta-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-lg);
+    letter-spacing: -0.02em;
   }
 </style>

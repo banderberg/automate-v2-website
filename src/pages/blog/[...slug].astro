@@ -17,7 +17,7 @@ const { Content } = await render(post);
 <BlogLayout
   title={post.data.title}
   description={post.data.description}
-  path={`/blog/${post.id}/`}
+  slug={post.id}
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
 >

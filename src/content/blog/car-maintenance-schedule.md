@@ -2,9 +2,10 @@
 title: "Car Maintenance Schedule: What to Do and When"
 description: "A general-purpose car maintenance schedule — oil, tires, brakes, fluids, and more — with typical intervals and why your owner's manual still wins."
 pubDate: 2026-07-25
+updatedDate: 2026-10-25
 ---
 
-Every car has its own manufacturer-specified maintenance schedule, and that schedule is the actual authority — it's tuned to your engine, your drivetrain, and sometimes your climate. What follows are the general ranges most vehicles fall into, useful for building a mental model of what's coming and when, or for sanity-checking what a shop tells you.
+Every car has its own manufacturer-specified maintenance schedule, and that schedule is the actual authority. It is tuned to your engine, your drivetrain and sometimes your climate. What follows are the general ranges most vehicles fall into, useful for building a mental model of what's coming and when, or for sanity-checking what a shop tells you.
 
 ## The general schedule
 
@@ -30,6 +31,8 @@ Two cars in the same class can have genuinely different intervals because of dif
 
 ## The part that actually breaks down
 
-Knowing the schedule is one problem. Remembering where you are in it — across a year of oil changes, tire rotations, and everything else, maybe across more than one vehicle — is the harder one. That's the part [AutoMate](../../) is built for: log a service once, set a reminder by distance or time (or both), and get notified when something's actually coming due instead of trying to remember it from a sticker on your windshield.
+Knowing the schedule is one problem. Remembering where you are in it, across a year of oil changes and tire rotations and maybe more than one car, is the harder one.
 
-[See how AutoMate handles reminders](../../#features) or [get it on Google Play](https://play.google.com/store/apps/details?id=com.arctosbuilt.automate).
+That is the part [AutoMate](/) handles. Log a service once and set a reminder by distance, by date, or both, whichever comes first. AutoMate estimates when you will reach the distance from how much you actually drive, shows a progress bar, and sends a notification when it is due. You can record an odometer reading without a fill-up, so the estimate stays honest between tanks.
+
+It is free, has no ads and needs no account. [Get it on Google Play](https://play.google.com/store/apps/details?id=com.arctosbuilt.automate).

@@ -1,99 +1,87 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import { withBase } from '../../lib/site';
 
 const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a, b) =>
+    (b.data.updatedDate ?? b.data.pubDate).getTime() - (a.data.updatedDate ?? a.data.pubDate).getTime(),
 );
-const dateFormat: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+
+const human = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+const path = '/blog/';
 ---
 
 <BaseLayout
-  title="Blog — AutoMate"
-  description="Car cost math, honest app comparisons, and maintenance guidance from the team behind AutoMate."
-  path="/blog/"
+  title="Blog: car running costs, maintenance and switching apps | AutoMate"
+  description="Plain guides to what a car really costs: cost per mile, a maintenance schedule you can check against your manual, and an honest look at Fuelio and Drivvo."
+  path={path}
+  ogSlug="blog"
+  breadcrumbs={[{ name: 'Blog', path }]}
 >
-  <Nav />
-  <main id="main">
-    <section class="blog-index">
-      <div class="section-inner">
-        <h1>The AutoMate Blog</h1>
-        <p class="lede">Car cost math, honest comparisons, and maintenance guidance.</p>
-        <ul class="post-list">
-          {
-            posts.map((post) => (
-              <li>
-                <a href={withBase(`/blog/${post.id}/`)}>
-                  <h2>{post.data.title}</h2>
-                  <p>{post.data.description}</p>
-                  <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString('en-US', dateFormat)}
-                  </time>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
-  </main>
-  <Footer />
+  <div class="blog wrap">
+    <header class="doc-head">
+      <h1>Blog</h1>
+      <p class="lede">Notes on what a car really costs to run, and how to keep track of it.</p>
+    </header>
+    <ol class="post-list">
+      {
+        posts.map((post) => (
+          <li>
+            <h2>
+              <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+            </h2>
+            <p>{post.data.description}</p>
+            <p class="muted post-date">
+              <time datetime={(post.data.updatedDate ?? post.data.pubDate).toISOString().slice(0, 10)}>
+                {post.data.updatedDate ? 'Updated ' : ''}
+                {human(post.data.updatedDate ?? post.data.pubDate)}
+              </time>
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
 </BaseLayout>
 
 <style>
-  .blog-index {
-    background: var(--surface);
-    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
-    min-height: 60vh;
+  .blog {
+    display: grid;
+    gap: var(--space-xl);
+    padding-block: var(--space-xl) 0;
   }
-  .section-inner {
-    max-width: 44rem;
-    margin: 0 auto;
-  }
-  h1 {
-    font-size: clamp(2rem, 3vw + 1rem, 3rem);
-    font-weight: 800;
-    color: var(--ink);
-  }
-  .lede {
-    color: var(--ink-secondary);
-    margin: var(--space-md) 0 var(--space-2xl);
+  .doc-head h1 {
+    font-size: clamp(2.25rem, 3.4vw + 1rem, 3.5rem);
   }
   .post-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-lg);
+    border-top: 2px solid var(--color-ink);
+    max-width: 48rem;
   }
-  .post-list a {
-    display: block;
-    text-decoration: none;
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
-    transition: border-color 180ms var(--ease-out-quart);
-  }
-  .post-list a:hover {
-    border-color: var(--primary);
+  .post-list li {
+    display: grid;
+    gap: var(--space-xs);
+    padding-block: var(--space-lg);
+    border-bottom: 1px solid var(--color-rule);
   }
   .post-list h2 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: var(--space-sm);
+    font-size: var(--text-lg);
+  }
+  .post-list h2 a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .post-list h2 a:hover {
+    color: var(--color-link);
+    text-decoration: underline;
   }
   .post-list p {
-    color: var(--ink-secondary);
-    margin-bottom: var(--space-md);
+    color: var(--color-ink-2);
   }
-  .post-list time {
-    font-size: 0.8rem;
-    color: var(--ink-muted);
+  .post-date {
+    font-size: var(--text-sm);
   }
 </style>

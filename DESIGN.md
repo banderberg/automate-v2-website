@@ -1,140 +1,58 @@
-# AutoMate Website — Design System
+# AutoMate site design system
 
-<!-- impeccable:design-doc -->
+Source of truth for the automateapp.info marketing site. Tokens live in `src/styles/global.css`; this file explains them. The July 2026 night-highway direction is retired.
 
-## Direction Contract
+## Direction
 
-**THESIS:** The car cost you don't know is the hook — the page opens on a toll ticket becoming a receipt, refusing both the SaaS hero-metric dashboard-screenshot template and the navy/gold "generic auto app" cliché.
+Sharp, polished, composed. The site should read as the same product as the app: warm neutral surfaces, AutoMate blue as the only strong colour, and real screenshots doing the selling. Editorial genre, "Workbench" structure: the home page leads with one large product screenshot, then a bench of four annotated screens whose numbered pins match the notes beneath them.
 
-**OWN-WORLD:** A night highway at the top of the page — near-black asphalt ground, headlight-lit — carrying AutoMate's own accent colors (primary blue, fuel teal, service orange, expense green) as the only lit signal, not literal federal-highway green. Illuminated advisory-sign panels carry features. Mile-marker ticks carry metrics. A toll-ticket-in / receipt-out pairing is the hero mechanism. The page then drives out of the night into AutoMate's real product world — warm-neutral daylight surfaces — for the body of the page, and returns to the dark register at the footer.
+Not: navy and gold, speedometers, stock or AI imagery, SaaS card grids, all-caps eyebrows, italic headings, arrows appended to links.
 
-**STORY:** A switcher or privacy-conscious visitor lands mid-thought — "you're already paying this, you just don't know the number" — sees a direct, named comparison against the trackers they're frustrated with, and taps through to Google Play. Nothing on the page is proof the visitor can't verify.
+## Colour
 
-**FIRST VIEWPORT:** Full-bleed dark hero. Left: a toll ticket stamped with an entry time and mile 000. Right: a receipt resolving from a redacted cost into the real mechanism (cost/mile). Headline above, single Play Store CTA below. No phone-mockup screenshot doing the hero's job for it.
+App tokens, reused as-is so site and app match.
 
-**FORM:** Mile-marker / toll-signage direction (candidate 6 of 7 grounded directions drawn from the app's own record-keeping culture — service booklets, ledgers, glovebox archives, oil-change stickers, fuel receipts, instrument-cluster numerals, highway signage), chosen over six external challengers (ASCII scene, seven-segment clock, VHS wall, Kraftwerk traffic-grid, alphabet storm, deep dive) on product clarity — a toll ticket paid for by mile is the same shape as "cost per mile," which no challenger matched. Staging draws on an evidenced-absence hero: the redacted cost is the empty center the surrounding proof rings.
+| Token | Light | Dark | Use |
+| --- | --- | --- | --- |
+| `--color-paper` | `#f5f4f1` | `#0e0e0c` | Page background |
+| `--color-card` | `#fefdfb` | `#1a1917` | Raised surfaces, footer, tables |
+| `--color-rule` | `#e2e0db` | `#2a2926` | Hairlines |
+| `--color-ink` | `#1c1b18` | `#f5f4f1` | Text |
+| `--color-ink-2` | `#5c5a55` | `#c5c2bc` | Secondary text |
+| `--color-muted` | `#706c67` | `#a19d96` | Meta text (AA on paper) |
+| `--color-brand` | `#4272c4` | `#4272c4` | Primary button fill |
+| `--color-link` | `#3560a8` | `#8db7e6` | Links and focus ring. Deeper than brand because `#4272c4` small text on paper is ~4.3:1 |
+| `--color-tint` / `--color-on-tint` | `#dbe6f5` / `#1e3554` | swapped | AutoMate column, "imports your history" chips |
+| `--color-fuel` / `--color-service` / `--color-expense` | `#1a9a8f` / `#e8772b` / `#2ead76` | same | Small marks only, never text |
 
----
+Dark mode follows `prefers-color-scheme`. Every colour in a component goes through a token.
 
-## 1. Color
+## Type
 
-### Strategy
+- Display: Archivo 800, tight tracking, roman only.
+- Body: Public Sans 400/600.
+- Self-hosted via Fontsource (latin subsets); the two critical weights are preloaded. No Google Fonts request.
+- Scale 1.25 from 16px; display headline is a clamp up to ~74px.
 
-**Committed** at the hero (one dark scene, lit accents carry the mechanism) → **Restrained** through the body (AutoMate's real warm-neutral system, one accent used sparingly) → **Committed** again at the footer (return to night). Color strategy shifts with the page's own night→day→night arc; it is not uniform top to bottom, and that shift is deliberate pacing, not inconsistency.
+## Layout
 
-Every token below is the app's own DESIGN.md system (`automate-v2/DESIGN.md`) — this site is a sibling of the app, not a new brand.
+- 16px minimum gutter (`--gutter` clamps 1rem to 2.5rem), page max 74rem, 65ch measure.
+- Mobile first. Must hold at 320, 375, 414, 768 and 1280 with no horizontal scroll (`overflow-x: clip` on html and body).
+- Grid tracks that hold images or long text use `minmax(0, 1fr)`.
+- Clickable text never wraps to two lines (buttons, nav, footer links).
 
-### Hero / Footer (night-highway register)
+## Components
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `road` | `#0B0C0E` | Hero and footer background — near-black, cooler than the app's warm dark surface, reads as asphalt/night sky rather than app chrome |
-| `road-line` | `#3A3D42` | Lane-line dividers, card borders on dark ground |
-| `sign-panel` | `#15171A` | Illuminated sign-panel background (feature cards in the dark register) |
-| `sign-glow` | primary/fuel/service/expense at 100% | Panel "illumination" — each feature sign lights in its own semantic color, never white-on-everything |
-| `ticket-paper` | `#F5F4F1` (app `surface`) | The ticket/receipt elements are literally paper — they stay light even inside the dark hero, the one deliberate light note in the scene |
+- `Shot`: real app screenshot (status bar cropped) in a rounded mask with a hairline and soft shadow. Optional numbered pins, aria-hidden, explained by a visible list.
+- `PlayLink`: the only install CTA. Google Play only; never an App Store badge.
+- `Faq`: native `<details>` plus FAQPage JSON-LD.
+- `Breadcrumbs`: visible trail plus BreadcrumbList JSON-LD (built in `BaseLayout`).
+- Comparison tables collapse to labelled blocks under 40rem.
 
-### Body (day register — app's real tokens, verbatim)
+## Content rules
 
-| Token | Light | Usage |
-|-------|-------|-------|
-| `surface` | `#F5F4F1` | Section background once the page "arrives" |
-| `card` | `#FEFDFB` | Feature detail cards, FAQ cards, comparison table |
-| `divider` | `#E2E0DB` | Section borders |
-| `ink` | `#1C1B18` | Primary text |
-| `ink-secondary` | `#5C5A55` | Secondary text |
-| `ink-muted` | `#706C67` | Captions, labels |
+Facts live in `src/lib/facts.ts` and nowhere else. Competitor facts carry the date they were checked; quotes are verbatim and attributed "Play Store review, <date>". Every comparison says what the other app does better. Privacy copy says "anonymous crash reports and usage statistics", never "no data collected".
 
-### Accent (both registers, identical hex to the app)
+## Open Graph images
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `primary` | `#4272C4` | Primary CTA, links, the "AutoMate" mark |
-| `fuel` | `#1A9A8F` | Fuel-logging sign panel + icon |
-| `service` | `#E8772B` | Service-tracking sign panel + icon |
-| `expense` | `#2EAD76` | Expense-logging sign panel + icon |
-| `destructive` | `#E05252` | Reserved — not expected on this site (no error states), keep for FAQ/legal edge cases only |
-| `primary-dark` | `#1E3554` | Small/bold `primary`-family text sitting directly on a `primary-light`-tinted background (e.g. the comparison table's highlighted column header) |
-
-No new brand colors are introduced. The night-highway scene is achieved with a cooler near-black ground and lit accents, never by inventing a new palette.
-
-### Contrast
-
-Ticket/receipt paper stays light-on-dark by design (`ink` on `ticket-paper`, verified ≥4.5:1). Sign-panel copy uses white or near-white text on the saturated accent, never the accent color as text-on-dark (fails contrast at small sizes). Body register follows the app's own verified AA pairings.
-
-Two traps found and fixed during the first build, worth carrying forward as rules:
-
-- **`primary` text directly on `primary-light`-tinted backgrounds measures ~4.0:1 — fails AA at small/bold sizes.** Use `primary-dark` for that specific pairing (verified ~10.5:1), not `primary`.
-- **Never dim small button/label text with `opacity` on a saturated accent background.** White at 85% opacity on `primary` (`#4272C4`) measures ~3.9:1; full-opacity white is ~4.7:1 — passing, but with little headroom. Prefer full-opacity text and create hierarchy with size/weight instead of opacity when the background is a saturated accent, not a neutral.
-
----
-
-## 2. Typography
-
-### Faces
-
-- **Display / headlines / sign panels / mile-marker numerals:** **Archivo** (Expanded and Black weights for hero and sign-panel headings, Black for the redacted-cost reveal). Archivo's wide, geometric-grotesk construction is the digital-era descendant of DOT/highway signage type — built for legibility at a glance, at speed and at a distance. That is the reason it's here; it is not a mood pick.
-- **Body / UI / captions:** **Public Sans**. Designed for federal digital services where plain legibility is the whole brief — the humanist counterpart to Archivo's geometric display voice, and a deliberate contrast pair rather than two similar grotesks.
-- Both are open, self-hosted (no runtime font-service call — keeps the SEO/perf budget intact).
-
-### Scale
-
-| Role | Size (clamp) | Weight | Face |
-|------|------|--------|------|
-| Hero headline | `clamp(2.25rem, 5vw + 1rem, 4.5rem)` | 800 (Archivo Black) | Archivo |
-| Redacted → resolved cost | `clamp(2rem, 4vw + 1rem, 3.5rem)` | 800, tabular-nums | Archivo |
-| Section heading | `clamp(1.75rem, 2.5vw + 1rem, 2.75rem)` | 700 (Archivo Expanded) | Archivo |
-| Sign-panel label | 13px, tracked uppercase | 700 | Archivo |
-| Mile-marker value | 28px, tabular-nums | 800 | Archivo |
-| Body | 16-18px | 400-500 | Public Sans |
-| Caption / meta | 13-14px | 400 | Public Sans |
-
-`text-wrap: balance` on all headings; `text-wrap: pretty` on body/FAQ copy. Hero headline never exceeds the 6rem ceiling; letter-spacing never tighter than -0.04em on display sizes.
-
----
-
-## 3. Signature Components
-
-### Hero: Ticket → Receipt
-
-Two paper-colored cards on the dark ground, connected by a single lane-line rule. Left card: entry ticket — stamped time, "MILE 000." Right card: receipt — a redacted cost (`????`, monospaced dashes) that resolves into "cost/mile" on scroll-into-view or after a timed reveal. Reduced motion: both states render statically with the resolved value shown, no timed reveal. This pairing is the thesis; it never degrades to a phone-mockup screenshot.
-
-### Sign Panel (feature card, dark register)
-
-Rounded-rectangle panel, `sign-panel` background, 2px border in the feature's own accent at 40% opacity, accent-colored icon + label lit at full opacity like an illuminated road sign. Panels sit in a horizontal strip on desktop, stack on mobile. No card shadows in this register — illumination reads through color, not elevation.
-
-### Mile Marker (metric)
-
-A single vertical tick mark + number, echoing a highway mile-marker post. Used for the 3-stat row (total spent, cost/mile, MPG trend) and reused sparingly wherever a real number should read as "distance traveled," not as a dashboard KPI tile. Never more than 3-4 per row — this is a signpost, not a dashboard.
-
-### Comparison Table
-
-Plain table, `card` background, `divider` rules. Rows named directly: AutoMate, Fuelio, Drivvo, Simply Auto, aCar, CARFAX Car Care. Check/x marks styled as small sign-post ticks, not generic checkmarks. Every claim in this table must trace to `docs/GROWTH-STRATEGY.md`'s real research — no invented rows.
-
-### FAQ
-
-Accordion, `card` background, `divider-subtle` between rows. Marked up as `FAQPage` structured data.
-
----
-
-## 4. Motion
-
-- Hero: ticket and receipt settle in with a short, exponential ease-out (no bounce/spring); the redacted cost resolves once, on first scroll-into-view, never re-triggering.
-- Sign panels: illuminate in a quick left-to-right stagger on first view (each panel's own accent, ~60ms offset) — a lit-signage sequence, not a uniform fade-up applied to every section.
-- Mile markers: numerals count up once on first view using `tabular-nums`, capped at 800ms.
-- `prefers-reduced-motion: reduce`: every animated state above renders in its resolved end-state immediately. No section's content is ever gated on a transition firing — the reveal enhances an already-visible default.
-- No decorative motion beyond the above. Motion marks state (ticket resolves, sign lights, count reaches its value), same rule the app itself follows.
-
----
-
-## 5. Layout & Rhythm
-
-4px base unit (inherited from the app). Hero gets the most vertical room of any section, matching the app's own "hero metric gets the most breathing room" rule. Section order paces night → day → night: Hero (dark) → Sign Panels (dark) → Mile-Marker Metrics (transition to light) → Feature Detail / Privacy (light) → Comparison (light) → FAQ (light) → Footer CTA (dark).
-
-**The night→day transition is a dedicated horizon strip, not a full-section gradient.** The first build put the gradient across the whole Mile-Marker section with `ink`-colored heading text on top — the heading sat on the still-dark top half of the gradient and was unreadable. Fixed by isolating the gradient into a short (`clamp(4rem, 12vw, 7rem)`) horizon div at the section's top edge; the section's actual content sits on a solid `surface` background below it. Any future night→day (or day→night) transition on this site should use the same pattern: a slim decorative gradient strip, never a gradient behind readable text.
-
----
-
-## 6. Accessibility
-
-WCAG AA, inherited from the app. Dark-register text is verified against `road`/`sign-panel`, not assumed safe because "dark mode usually is." All illustrative ticket/receipt numbers are cosmetic hero content, not real user data — no user data exists yet to display, and none is fabricated as if real (see PRODUCT.md, Evidence on Hand).
+`src/pages/og/[slug].astro` renders a 1200x630 card per page. `npm run og` builds the site and screenshots each card with headless Chrome into `public/og/<slug>.png`. Re-run it when a page title changes.

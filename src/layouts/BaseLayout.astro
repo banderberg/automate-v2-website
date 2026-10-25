@@ -1,103 +1,120 @@
 ---
 import '../styles/global.css';
-import { withBase } from '../lib/site';
+import archivo800 from '@fontsource/archivo/files/archivo-latin-800-normal.woff2?url';
+import publicSans400 from '@fontsource/public-sans/files/public-sans-latin-400-normal.woff2?url';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { SITE_NAME } from '../lib/facts';
+
+export interface Crumb {
+  name: string;
+  path: string;
+}
 
 interface Props {
   title: string;
   description: string;
-  /** Path from site root, e.g. "/" or "/blog/cost-per-mile" */
+  /** Root-relative path with trailing slash, e.g. "/" or "/vs-fuelio/". */
   path: string;
-  /** Extra JSON-LD objects to emit alongside the site-wide SoftwareApplication schema */
+  /** Slug of the OG card rendered at /og/<slug>.png (see src/pages/og/). */
+  ogSlug: string;
+  ogType?: 'website' | 'article';
   structuredData?: Record<string, unknown>[];
-  ogImage?: string;
+  /** Trail below Home. Home itself is added automatically. */
+  breadcrumbs?: Crumb[];
+  /** Keep the page out of search results (404). Drops the canonical link. */
+  noindex?: boolean;
 }
 
 const {
   title,
   description,
   path,
+  ogSlug,
+  ogType = 'website',
   structuredData = [],
-  ogImage = '/og.png',
+  breadcrumbs = [],
+  noindex = false,
 } = Astro.props;
 
-const canonicalURL = new URL(withBase(path), Astro.site);
-const ogImageURL = new URL(withBase(ogImage), Astro.site);
-const homeURL = new URL(withBase('/'), Astro.site);
+const site = Astro.site ?? new URL('https://automateapp.info');
+const canonical = new URL(path, site).toString();
+const ogImage = new URL(`/og/${ogSlug}.png`, site).toString();
 
-const PLAY_STORE_URL =
-  'https://play.google.com/store/apps/details?id=com.arctosbuilt.automate';
+const trail: Crumb[] = breadcrumbs.length ? [{ name: 'Home', path: '/' }, ...breadcrumbs] : [];
+const breadcrumbSchema = trail.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: trail.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        item: new URL(c.path, site).toString(),
+      })),
+    }
+  : null;
 
-const softwareAppSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'AutoMate',
-  applicationCategory: 'FinanceApplication',
-  operatingSystem: 'Android',
-  description:
-    'AutoMate is a car expense tracker for fuel, service, and other costs. No ads, no account required, fully offline.',
-  url: homeURL.toString(),
-  downloadUrl: PLAY_STORE_URL,
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD',
-  },
-};
-
-const jsonLdBlocks = [softwareAppSchema, ...structuredData];
+const jsonLd = breadcrumbSchema ? [...structuredData, breadcrumbSchema] : structuredData;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href={withBase('/favicon.png')} />
-    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
-    <meta name="generator" content={Astro.generator} />
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={archivo800} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={publicSans400} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#f5f4f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0e0c" media="(prefers-color-scheme: dark)" />
+    <meta name="generator" content={Astro.generator} />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImageURL} />
-    <meta property="og:site_name" content="AutoMate" />
-
-    <!-- Twitter -->
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image" content={ogImage} />
 
-    <meta name="theme-color" content="#0b0c0e" />
-
-    {jsonLdBlocks.map((block) => (
-      <script type="application/ld+json" set:html={JSON.stringify(block)} is:inline />
-    ))}
+    {jsonLd.map((block) => <script type="application/ld+json" is:inline set:html={JSON.stringify(block)} />)}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <slot />
+    <SiteHeader />
+    {trail.length > 0 && <Breadcrumbs trail={trail} />}
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
   </body>
 </html>
 
 <style>
   .skip-link {
     position: absolute;
-    left: -9999px;
-    top: 0;
-    background: var(--primary);
-    color: white;
-    padding: var(--space-sm) var(--space-lg);
+    left: var(--space-md);
+    top: -100px;
     z-index: var(--z-toast);
-    border-radius: 0 0 var(--radius-md) 0;
+    padding: var(--space-xs) var(--space-md);
+    background: var(--color-card);
+    color: var(--color-link);
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-sm);
   }
   .skip-link:focus {
-    left: 0;
+    top: var(--space-md);
   }
 </style>

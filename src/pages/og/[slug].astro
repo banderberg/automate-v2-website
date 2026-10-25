@@ -1,0 +1,116 @@
+---
+// Render target for Open Graph images, not a page: noindex, excluded from the
+// sitemap. `npm run og` screenshots each one into public/og/<slug>.png.
+import '../../styles/global.css';
+import { Image } from 'astro:assets';
+import { ogCards, type OgCard } from '../../lib/og';
+import icon from '../../assets/icon.png';
+import dashboard from '../../assets/screens/dashboard.png';
+
+export async function getStaticPaths() {
+  const cards = await ogCards();
+  return cards.map((card) => ({ params: { slug: card.slug }, props: { card } }));
+}
+
+interface Props {
+  card: OgCard;
+}
+
+const { card } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>OG card: {card.headline}</title>
+  </head>
+  <body class="og-body">
+    <div class="og">
+      <div class="og-copy">
+        <p class="og-brand">
+          <Image src={icon} alt="" width={56} height={56} />
+          <span>AutoMate</span>
+        </p>
+        <p class="og-headline">{card.headline}</p>
+        <p class="og-sub">{card.sub}</p>
+        <p class="og-url">automateapp.info</p>
+      </div>
+      <div class="og-shot">
+        <Image src={dashboard} alt="" width={420} />
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  :global(html),
+  .og-body {
+    margin: 0;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    color-scheme: light;
+  }
+  .og {
+    width: 1200px;
+    height: 630px;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 56px;
+    padding: 64px 0 0 72px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    box-sizing: border-box;
+  }
+  .og-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 64px;
+  }
+  .og-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 34px;
+    letter-spacing: -0.02em;
+  }
+  .og-brand img {
+    border-radius: 14px;
+  }
+  .og-headline {
+    margin: 12px 0 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 66px;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .og-sub {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1.35;
+    color: var(--color-ink-2);
+    max-width: 30ch;
+  }
+  .og-url {
+    margin: auto 0 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-link);
+  }
+  .og-shot {
+    align-self: start;
+    border-radius: 36px 0 0 0;
+    overflow: hidden;
+    border: 2px solid var(--color-rule);
+    border-right: 0;
+    border-bottom: 0;
+  }
+</style>

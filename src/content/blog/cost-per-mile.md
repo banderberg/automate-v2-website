@@ -2,6 +2,7 @@
 title: "How to Calculate Your Car's True Cost Per Mile"
 description: "The real formula for cost per mile — fuel, maintenance, insurance, and depreciation — plus a free calculator you can use right now."
 pubDate: 2026-07-25
+updatedDate: 2026-10-25
 ---
 
 Most drivers can tell you what they paid for gas last week. Almost none can tell you what their car costs them **per mile**. That number is more useful than almost any other figure in your budget — it's what actually lets you compare a commute, a road trip, or even one car against another.
@@ -23,7 +24,7 @@ The part that trips people up is "total car costs." Most people only count fuel.
 - **Parking & tolls** — easy to forget, adds up fast
 - **Depreciation** *(optional, for a full ownership-cost picture)* — what the car lost in value over the period
 
-Fuel and maintenance alone will still undercount your real cost — but they're the number most people actually want day to day, and it's the number a fill-up-and-go tracker like AutoMate calculates automatically as you log events.
+Fuel and maintenance alone still undercount your real cost. Log the other expenses too (insurance, registration, parking, tolls) and the figure gets close to the truth. AutoMate's dashboard divides everything you logged by the distance you drove in the period you pick.
 
 ## Try it
 
@@ -46,9 +47,9 @@ Fuel and maintenance alone will still undercount your real cost — but they're 
   .cpm-calculator {
     display: grid;
     gap: 1rem;
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius-lg);
+    background: var(--color-card);
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-md);
     padding: 1.5rem;
     margin: 1.5rem 0 2rem;
   }
@@ -60,39 +61,39 @@ Fuel and maintenance alone will still undercount your real cost — but they're 
   .cpm-field label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--ink);
+    color: var(--color-ink);
   }
   .cpm-field input {
     font-family: var(--font-body);
     font-size: 1rem;
     padding: 0.65rem 0.75rem;
-    border: 1px solid var(--divider);
+    border: 1px solid var(--color-rule);
     border-radius: var(--radius-md);
-    background: var(--surface);
-    color: var(--ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
   }
   .cpm-field input:focus {
-    outline: 2px solid var(--primary);
+    outline: 2px solid var(--color-focus);
     outline-offset: 1px;
   }
   .cpm-result {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    background: var(--primary-light);
+    background: var(--color-tint);
     border-radius: var(--radius-md);
     padding: 1rem 1.25rem;
   }
   .cpm-result-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--primary);
+    color: var(--color-on-tint);
   }
   .cpm-result-value {
     font-family: var(--font-display);
     font-size: 1.75rem;
     font-weight: 800;
-    color: var(--primary);
+    color: var(--color-on-tint);
     font-variant-numeric: tabular-nums;
   }
 </style>
@@ -123,6 +124,6 @@ A car that gets great gas mileage can still be expensive to own if it's in the s
 
 ## How to actually track it
 
-The honest answer is that nobody calculates this by hand more than once. The friction of digging through receipts is exactly why most people only ever estimate. Apps built for this — [AutoMate](../../) logs fuel, service, and expenses as they happen and keeps a running cost-per-mile figure automatically, using your real odometer readings instead of a period estimate.
+Nobody calculates this by hand more than once. Digging through receipts is exactly why most people only ever estimate. A tracker does it as you go: [AutoMate](/) logs fuel, service and expenses as they happen and shows cost per mile on its dashboard, worked out from your own odometer readings, for any period from one month to all time. It is free, with no ads and no account.
 
 If you'd rather do it manually once a year: pull your total spend from bank statements and receipts, pull your odometer reading from a year ago and today, and divide. It's rough, but it's real — and it's a lot better than not knowing at all.

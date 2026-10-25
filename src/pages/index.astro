@@ -1,43 +1,535 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import SignPanels from '../components/SignPanels.astro';
-import MileMarkers from '../components/MileMarkers.astro';
-import Comparison from '../components/Comparison.astro';
-import PrivacyStatement from '../components/PrivacyStatement.astro';
+import Shot from '../components/Shot.astro';
+import PlayLink from '../components/PlayLink.astro';
 import Faq from '../components/Faq.astro';
-import Footer from '../components/Footer.astro';
-import { faqItems } from '../lib/content';
+import {
+  capabilities,
+  competitors,
+  homeFaq,
+  PLAY_URL,
+  PRICING_LINE,
+  LANGUAGES,
+} from '../lib/facts';
 
-const faqSchema = {
+import dashboard from '../assets/screens/dashboard.png';
+import fillUp from '../assets/screens/add-fill-up.png';
+import charts from '../assets/screens/dashboard-charts.png';
+import reminders from '../assets/screens/reminders.png';
+import history from '../assets/screens/history.png';
+
+const title = 'AutoMate: car expense tracker for Android. Free, no ads, no account';
+const description =
+  'Log fuel, service and every other car expense, and see your real cost per mile. AutoMate is free, has no ads, needs no account and keeps your records on your phone. Android.';
+
+const site = Astro.site ?? new URL('https://automateapp.info');
+
+const softwareApp = {
   '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqItems.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
+  '@type': 'MobileApplication',
+  name: 'AutoMate - Car Expense Tracker',
+  alternateName: 'AutoMate',
+  operatingSystem: 'Android',
+  applicationCategory: 'FinanceApplication',
+  description:
+    'Track fuel, service and expenses for your car. Cost per mile, fuel economy trends, reminders by distance or date, CSV and PDF export. No ads, no account, works offline.',
+  url: site.toString(),
+  downloadUrl: PLAY_URL,
+  installUrl: PLAY_URL,
+  image: new URL('/icon-192.png', site).toString(),
+  inLanguage: ['en', 'es', 'pt', 'de', 'ru', 'tr', 'hi'],
+  isAccessibleForFree: true,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
 };
+
+const webSite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'AutoMate',
+  url: site.toString(),
+};
+
+const bench = [
+  {
+    shot: fillUp,
+    alt: 'AutoMate Add Fill-Up screen. The odometer field shows an estimated 55,789 miles, the price per gallon is carried over from the last fill-up at $4.399, the total is calculated, and a Partial fill switch sits below.',
+    title: 'Log a fill-up in about fifteen seconds',
+    body: 'Change what changed and save. The rest is carried over or worked out for you.',
+    pins: [
+      { n: 1, x: 51, y: 20.2 },
+      { n: 2, x: 40, y: 53 },
+      { n: 3, x: 76, y: 53 },
+      { n: 4, x: 62, y: 67 },
+    ],
+    legend: [
+      'An odometer estimate from your own driving.',
+      'Price per gallon from your last fill-up.',
+      'Total worked out from volume and price.',
+      'Partial fills stay out of the economy maths.',
+    ],
+  },
+  {
+    shot: charts,
+    alt: 'AutoMate dashboard, scrolled: upcoming reminders for a tire rotation and an oil change, a fuel efficiency line chart averaging 20.7 miles per gallon, and a monthly spending bar chart split into fuel, service and expense.',
+    title: 'See where the money went',
+    body: 'One dashboard for the period you pick, from a month to all time.',
+    pins: [
+      { n: 1, x: 62, y: 22.7 },
+      { n: 2, x: 62, y: 40 },
+      { n: 3, x: 76, y: 70 },
+    ],
+    legend: [
+      'What is due next, and how far away it is.',
+      'Fuel economy over time, not just the last tank.',
+      'Spending by month, split into fuel, service and expenses.',
+    ],
+  },
+  {
+    shot: reminders,
+    alt: 'AutoMate Reminders screen with two cards. Tire Rotation is 70 percent of the way to due, with the next one at 56,436 miles or December 29, 2026. Oil Change is 77 percent of the way to due.',
+    title: 'Reminders by distance, date, or both',
+    body: 'Whichever comes first wins, and the bar shows how close you are.',
+    pins: [
+      { n: 1, x: 50, y: 15.4 },
+      { n: 2, x: 79, y: 21.1 },
+    ],
+    legend: [
+      'Progress toward the next service.',
+      'The date limit, counted down in days.',
+    ],
+  },
+  {
+    shot: history,
+    alt: 'AutoMate History screen: a search box for notes, places and categories, filter chips for Fuel, Service, Expense and Mileage, and fill-ups grouped by month with a monthly total of $214.53 for September 2026.',
+    title: 'Every entry, searchable',
+    body: 'Find the brake job from two summers ago by place, note or category.',
+    pins: [
+      { n: 1, x: 88, y: 11.9 },
+      { n: 2, x: 98, y: 19.1 },
+      { n: 3, x: 70, y: 24.7 },
+    ],
+    legend: [
+      'Search notes, places and categories.',
+      'Filter by fuel, service, expense or mileage.',
+      'A running total for every month.',
+    ],
+  },
+];
+
+const switchLabel = {
+  importer: 'Imports your history',
+  coming: 'Import coming',
+  manual: 'Start fresh',
+} as const;
 ---
 
-<BaseLayout
-  title="AutoMate — Car Expense Tracker. Private, No Ads, No Account."
-  description="Know what your car actually costs. Track fuel, service & expenses in 15 seconds. No ads, no account, fully offline. Free on Google Play."
-  path="/"
-  structuredData={[faqSchema]}
->
-  <Nav />
-  <main id="main">
-    <Hero />
-    <SignPanels />
-    <MileMarkers />
-    <Comparison />
-    <PrivacyStatement />
-    <Faq />
-  </main>
-  <Footer />
+<BaseLayout title={title} description={description} path="/" ogSlug="home" structuredData={[softwareApp, webSite]}>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 id="hero-title">Know what your car costs per mile.</h1>
+      <p class="lede">
+        AutoMate logs fill-ups, service and every other car expense in a few taps, then does the arithmetic: total
+        spent, cost per mile and fuel economy over time.
+      </p>
+      <div class="hero-cta">
+        <PlayLink />
+        <p class="stance">{PRICING_LINE}</p>
+      </div>
+      <p class="hero-note muted">For Android phones. Your records stay on the phone.</p>
+    </div>
+    <figure class="hero-figure">
+      <Shot
+        src={dashboard}
+        alt="AutoMate dashboard for a 2022 Kia Telluride over one year: $1,098.35 total spent, $0.22 cost per mile, 20.7 miles per gallon average and 4,891 miles driven, with a projected annual cost of $1,797 and two insight cards."
+        eager
+        sizes="(min-width: 60rem) 360px, (min-width: 40rem) 60vw, 92vw"
+      />
+      <figcaption class="muted">The dashboard, one-year view.</figcaption>
+    </figure>
+  </section>
+
+  <section class="bench wrap" aria-labelledby="bench-title">
+    <div class="section-head">
+      <h2 id="bench-title">Four screens do most of the work</h2>
+      <p>Numbers on each screenshot match the notes beneath it.</p>
+    </div>
+    <ol class="bench-grid">
+      {
+        bench.map((b) => (
+          <li class="bench-item">
+            <Shot src={b.shot} alt={b.alt} pins={b.pins} />
+            <div class="bench-text">
+              <h3>{b.title}</h3>
+              <p>{b.body}</p>
+              <ol class="legend">
+                {b.legend.map((l) => (
+                  <li>{l}</li>
+                ))}
+              </ol>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="tracks wrap" aria-labelledby="tracks-title">
+    <div class="section-head">
+      <h2 id="tracks-title">What it keeps track of</h2>
+      <p>Everything below is in the app today and free to use.</p>
+    </div>
+    <dl class="spec">
+      {
+        capabilities.map((c) => (
+          <div class="spec-row">
+            <dt>
+              <span class={`mark mark--${c.category}`} aria-hidden="true" />
+              {c.name}
+            </dt>
+            <dd>{c.detail}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="terms wrap" aria-labelledby="terms-title">
+    <div class="section-head">
+      <h2 id="terms-title">The terms, in plain words</h2>
+    </div>
+    <div class="terms-grid">
+      <div class="terms-col">
+        <h3>What it costs</h3>
+        <ul class="ticks">
+          <li><strong>Nothing.</strong> Every feature is free today.</li>
+          <li><strong>No ads.</strong> Not in a free tier, not as sponsored content.</li>
+          <li><strong>No subscription.</strong> A one-time unlock for some power features is planned. It will never be a subscription.</li>
+        </ul>
+      </div>
+      <div class="terms-col">
+        <h3>What leaves your phone</h3>
+        <ul class="ticks">
+          <li><strong>Your records don’t.</strong> No account and no cloud copy. They leave only when you export or back up.</li>
+          <li><strong>A VIN, if you look one up.</strong> It goes to the free NHTSA database to fill in year, make and model.</li>
+          <li><strong>Anonymous crash reports and usage statistics.</strong> Usage statistics can be turned off in Settings.</li>
+          <li><strong>A one-time install notice</strong> with the app version, device model, OS and language. None of your records.</li>
+        </ul>
+        <p class="terms-link"><a href="/privacy/">Read the privacy policy</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="switch wrap" aria-labelledby="switch-title">
+    <div class="section-head">
+      <h2 id="switch-title">Coming from another app?</h2>
+      <p>
+        Honest comparisons, including what the other app does better. Fuelio and Drivvo histories import directly.
+      </p>
+    </div>
+    <ul class="switch-list">
+      {
+        competitors.map((c) => (
+          <li>
+            <a href={`/vs-${c.slug}/`} class="switch-row">
+              <span class="switch-name">AutoMate vs {c.name}</span>
+              <span class="switch-line">{c.oneLine}</span>
+              <span class:list={['switch-status', `switch-status--${c.switching.kind}`]}>
+                {switchLabel[c.switching.kind]}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="switch-more"><a href="/alternatives/">All car expense tracker alternatives</a></p>
+  </section>
+
+  <div class="wrap faq-wrap">
+    <Faq items={homeFaq} heading="Questions people ask" />
+  </div>
+
+  <section class="closing wrap" aria-labelledby="closing-title">
+    <h2 id="closing-title">You already pay for the car. Know the number.</h2>
+    <p class="muted">Android. {LANGUAGES.length} languages. {PRICING_LINE}</p>
+    <PlayLink />
+  </section>
 </BaseLayout>
+
+<style>
+  .hero {
+    display: grid;
+    gap: var(--space-xl);
+    padding-block: var(--space-xl) var(--space-2xl);
+    align-items: start;
+  }
+  .hero-copy {
+    display: grid;
+    gap: var(--space-lg);
+    align-content: start;
+  }
+  .hero h1 {
+    max-width: 11ch;
+  }
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm) var(--space-lg);
+  }
+  .stance {
+    font-weight: 600;
+  }
+  .hero-note {
+    font-size: var(--text-sm);
+  }
+  .hero-figure {
+    margin: 0;
+    display: grid;
+    gap: var(--space-sm);
+    width: min(100%, 22rem);
+  }
+  .hero-figure :global(.shot) {
+    aspect-ratio: 1080 / 1300;
+  }
+  .hero-figure figcaption {
+    font-size: var(--text-sm);
+  }
+  @media (min-width: 40rem) {
+    .hero-figure {
+      justify-self: start;
+    }
+  }
+  @media (min-width: 60rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: var(--space-2xl);
+      padding-block: var(--space-2xl) 0;
+    }
+    .hero-copy {
+      padding-top: var(--space-xl);
+    }
+    .hero-figure {
+      justify-self: end;
+      /* the shot drops past the hero's bottom edge into the next section */
+      margin-bottom: calc(var(--space-3xl) * -1);
+    }
+    .hero-figure :global(.shot) {
+      aspect-ratio: 1080 / 2235;
+    }
+  }
+
+  .bench {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+  @media (min-width: 60rem) {
+    .bench {
+      padding-top: calc(var(--space-3xl) + var(--space-xl));
+    }
+  }
+  .bench-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xl) var(--space-xl);
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bench-item {
+    display: grid;
+    gap: var(--space-lg);
+    align-content: start;
+  }
+  .bench-item :global(.shot) {
+    width: min(100%, 17rem);
+  }
+  .bench-text {
+    display: grid;
+    gap: var(--space-xs);
+    max-width: 30rem;
+  }
+  .bench-text > p {
+    color: var(--color-ink-2);
+  }
+  .legend {
+    margin: var(--space-xs) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: pin;
+    display: grid;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-ink-2);
+  }
+  .legend li {
+    counter-increment: pin;
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    gap: var(--space-xs);
+    align-items: baseline;
+  }
+  .legend li::before {
+    content: counter(pin);
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-pin);
+    color: var(--color-on-pin);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.6875rem;
+    line-height: 1;
+    transform: translateY(0.1rem);
+  }
+  @media (min-width: 40rem) {
+    .bench-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 66rem) {
+    .bench-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    /* stagger the row so it reads as a workbench, not a template grid */
+    .bench-item:nth-child(even) {
+      margin-top: var(--space-2xl);
+    }
+  }
+
+  .tracks {
+    padding-block: var(--space-2xl);
+  }
+  .spec {
+    margin: 0;
+    border-top: 2px solid var(--color-ink);
+  }
+  .spec-row {
+    display: grid;
+    gap: var(--space-2xs) var(--space-xl);
+    padding-block: var(--space-sm);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .spec dt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-weight: 600;
+  }
+  .spec dd {
+    margin: 0;
+    color: var(--color-ink-2);
+    max-width: var(--measure);
+  }
+  @media (min-width: 48rem) {
+    .spec-row {
+      grid-template-columns: 14rem minmax(0, 1fr);
+    }
+  }
+
+  .terms {
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+  .terms-grid {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .terms-col {
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+    padding: var(--space-lg);
+    background: var(--color-card);
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-md);
+  }
+  .ticks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .ticks li {
+    color: var(--color-ink-2);
+  }
+  .ticks strong {
+    color: var(--color-ink);
+  }
+  @media (min-width: 52rem) {
+    .terms-grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+  }
+
+  .switch {
+    padding-block: var(--space-2xl);
+  }
+  .switch-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-rule);
+  }
+  .switch-row {
+    display: grid;
+    gap: var(--space-2xs) var(--space-lg);
+    padding-block: var(--space-md);
+    border-bottom: 1px solid var(--color-rule);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .switch-row:hover .switch-name {
+    color: var(--color-link);
+    text-decoration: underline;
+  }
+  .switch-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-md);
+    letter-spacing: -0.01em;
+  }
+  .switch-line {
+    color: var(--color-ink-2);
+  }
+  .switch-status {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+  .switch-status--importer {
+    color: var(--color-on-tint);
+    background: var(--color-tint);
+    border-radius: 999px;
+    padding: var(--space-3xs) var(--space-sm);
+    justify-self: start;
+  }
+  .switch-more {
+    margin-top: var(--space-md);
+  }
+  @media (min-width: 52rem) {
+    .switch-row {
+      grid-template-columns: 15rem minmax(0, 1fr) 11rem;
+      align-items: baseline;
+    }
+    .switch-status {
+      justify-self: end;
+    }
+  }
+
+  .faq-wrap {
+    padding-block: var(--space-2xl);
+  }
+
+  .closing {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+    padding-block: var(--space-2xl) 0;
+  }
+  .closing h2 {
+    max-width: 18ch;
+    font-size: clamp(2rem, 3vw + 1rem, 3.25rem);
+  }
+</style>

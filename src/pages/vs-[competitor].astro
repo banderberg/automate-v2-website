@@ -1,0 +1,343 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlayLink from '../components/PlayLink.astro';
+import {
+  competitors,
+  formatDate,
+  playListing,
+  RESEARCH_DATE,
+  RESEARCH_DATE_LABEL,
+  type Competitor,
+} from '../lib/facts';
+
+export function getStaticPaths() {
+  return competitors.map((c) => ({ params: { competitor: c.slug }, props: { c } }));
+}
+
+interface Props {
+  c: Competitor;
+}
+
+const { c } = Astro.props;
+const path = `/vs-${c.slug}/`;
+const site = Astro.site ?? new URL('https://automateapp.info');
+
+const others = competitors.filter((o) => o.slug !== c.slug);
+
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: c.meta.title,
+  description: c.meta.description,
+  dateModified: RESEARCH_DATE,
+  datePublished: RESEARCH_DATE,
+  mainEntityOfPage: new URL(path, site).toString(),
+  author: { '@type': 'Organization', name: 'AutoMate' },
+  about: [
+    { '@type': 'MobileApplication', name: 'AutoMate', operatingSystem: 'Android' },
+    { '@type': 'MobileApplication', name: c.name, url: playListing(c.pkg) },
+  ],
+};
+---
+
+<BaseLayout
+  title={c.meta.title}
+  description={c.meta.description}
+  path={path}
+  ogSlug={`vs-${c.slug}`}
+  ogType="article"
+  structuredData={[article]}
+  breadcrumbs={[
+    { name: 'Alternatives', path: '/alternatives/' },
+    { name: `vs ${c.name}`, path },
+  ]}
+>
+  <article class="vs wrap">
+    <header class="vs-head">
+      <h1>{c.name} alternative: AutoMate vs {c.name}</h1>
+      <p class="lede">{c.whoFor}</p>
+      <p class="checked">
+        Compared on {RESEARCH_DATE_LABEL}. {c.name} on Google Play that day: {c.snapshot}
+      </p>
+    </header>
+
+    <section class="vs-table" aria-labelledby="table-title">
+      <h2 id="table-title">Side by side</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-labelledby="table-title">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="visually-hidden">Feature</span></th>
+              <th scope="col">AutoMate</th>
+              <th scope="col">{c.name}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              c.rows.map((r) => (
+                <tr>
+                  <th scope="row">{r.label}</th>
+                  <td data-label="AutoMate">{r.automate}</td>
+                  <td data-label={c.name}>{r.them}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="verdicts">
+      <section aria-labelledby="they-title">
+        <h2 id="they-title">Where {c.name} is better</h2>
+        <ul>{c.theyAreBetter.map((t) => <li>{t}</li>)}</ul>
+      </section>
+      <section aria-labelledby="we-title">
+        <h2 id="we-title">Where AutoMate is better</h2>
+        <ul>{c.weAreBetter.map((t) => <li>{t}</li>)}</ul>
+      </section>
+    </div>
+
+    {
+      c.quote && (
+        <figure class="quote">
+          <blockquote>
+            <p>“{c.quote.text}”</p>
+          </blockquote>
+          <figcaption>
+            Play Store review of {c.name}, {formatDate(c.quote.date)}, {c.quote.stars} of 5 stars
+          </figcaption>
+        </figure>
+      )
+    }
+
+    <section class="switching" aria-labelledby="switching-title">
+      <h2 id="switching-title">What switching involves</h2>
+      <p>{c.switchingNote}</p>
+      {
+        c.switching.kind === 'importer' && (
+          <p>
+            <a href={c.switching.guide}>Step-by-step: move from {c.name} to AutoMate</a>
+          </p>
+        )
+      }
+      <div class="switching-cta">
+        <PlayLink />
+      </div>
+    </section>
+
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <p>
+        {c.name} facts come from its <a href={playListing(c.pkg)} rel="noopener">Google Play listing</a> and its Play and
+        App Store reviews, collected on {RESEARCH_DATE_LABEL}. Review complaints describe what reviewers reported, not
+        something we tested. Prices are in US dollars and can change. AutoMate facts describe the current Android app.
+        Spotted something out of date? <a href="mailto:arctos.built@gmail.com">Tell the developer</a>.
+      </p>
+    </section>
+
+    <nav class="others" aria-labelledby="others-title">
+      <h2 id="others-title">Other comparisons</h2>
+      <ul>
+        {
+          others.map((o) => (
+            <li>
+              <a href={`/vs-${o.slug}/`}>AutoMate vs {o.name}</a>
+            </li>
+          ))
+        }
+        <li><a href="/alternatives/">All alternatives</a></li>
+      </ul>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .vs {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl) 0;
+  }
+  .vs-head {
+    display: grid;
+    gap: var(--space-md);
+  }
+  .vs-head h1 {
+    font-size: clamp(2.25rem, 3.6vw + 1rem, 3.75rem);
+  }
+  .checked {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    max-width: 44rem;
+  }
+
+  .vs-table h2,
+  .switching h2,
+  .sources h2,
+  .others h2 {
+    margin-bottom: var(--space-md);
+  }
+  .sources h2,
+  .others h2 {
+    font-size: var(--text-lg);
+  }
+  .table-scroll {
+    border-radius: var(--radius-md);
+  }
+  table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background: var(--color-card);
+    border: 1px solid var(--color-rule);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  thead th {
+    text-align: left;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-md);
+    padding: var(--space-md);
+    border-bottom: 2px solid var(--color-ink);
+  }
+  thead th:nth-child(2) {
+    color: var(--color-on-tint);
+    background: var(--color-tint);
+  }
+  tbody th {
+    text-align: left;
+    font-weight: 600;
+    vertical-align: top;
+    padding: var(--space-sm) var(--space-md);
+  }
+  thead th:first-child {
+    width: 24%;
+  }
+  thead th:nth-child(2) {
+    width: 33%;
+  }
+  tbody td {
+    vertical-align: top;
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-ink-2);
+  }
+  tbody tr + tr > * {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  /* Small screens: each row becomes a labelled block, no sideways scroll. */
+  @media (max-width: 39.99rem) {
+    table,
+    tbody,
+    tr,
+    th,
+    td {
+      display: block;
+      width: 100%;
+    }
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    tbody tr {
+      padding: var(--space-sm) var(--space-md);
+    }
+    tbody tr + tr > * {
+      border-top: 0;
+    }
+    tbody tr + tr {
+      border-top: 1px solid var(--color-rule);
+    }
+    tbody th {
+      padding: 0 0 var(--space-2xs);
+      width: auto;
+    }
+    tbody td {
+      padding: var(--space-2xs) 0;
+      display: grid;
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+    tbody td::before {
+      content: attr(data-label);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-muted);
+    }
+  }
+
+  .verdicts {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .verdicts h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-sm);
+  }
+  .verdicts ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: var(--space-xs);
+    color: var(--color-ink-2);
+  }
+  @media (min-width: 52rem) {
+    .verdicts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .quote {
+    margin: 0;
+    padding-left: var(--space-lg);
+    border-left: 2px solid var(--color-rule);
+    max-width: 44rem;
+  }
+  .quote blockquote {
+    margin: 0;
+  }
+  .quote p {
+    font-size: var(--text-lg);
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+  .quote figcaption {
+    margin-top: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .switching {
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 44rem;
+  }
+  .switching p {
+    color: var(--color-ink-2);
+  }
+  .switching-cta {
+    margin-top: var(--space-sm);
+  }
+
+  .sources p {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    max-width: var(--measure);
+  }
+
+  .others ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-lg);
+  }
+  .others a {
+    white-space: nowrap;
+  }
+</style>
