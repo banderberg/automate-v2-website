@@ -21,7 +21,7 @@ This is a marketing website for AutoMate, a car expense tracking app (see [[auto
 
 ## Positioning
 
-Same wedge as the app: **"Beautiful. Private. Smart."** — directly against competitors' weak points (ads, forced accounts, broken cloud sync, dated UI). No neighboring tracker can truthfully copy: fully on-device data with no server/cloud dependency (the one exception is a VIN lookup against the free NHTSA API), no accounts, no ads, no subscription — one-time $9.99 unlock for premium features. An insight engine that surfaces patterns ("your fuel economy dropped 14% — check tire pressure"), not just a ledger.
+Same wedge as the app: **"Beautiful. Private. Smart."** — directly against competitors' weak points (ads, forced accounts, broken cloud sync, dated UI). No neighboring tracker can truthfully copy: fully on-device data with no server/cloud dependency (the one exception is a VIN lookup against the free NHTSA API), no accounts, no ads, no subscription. Every feature is free today; a one-time unlock for some power features is planned and will never be a subscription. The site never states a price. An insight engine that surfaces patterns ("your fuel economy dropped 14% — check tire pressure"), not just a ledger.
 
 ## Operating Context
 
@@ -44,7 +44,7 @@ Real, current feature set (source: `docs/PLAY-STORE-LISTING.md` in the app repo)
 - Fully offline — no cloud dependency
 - No ads, no forced account, ever
 
-Monetization: free tier = 1 vehicle, no PDF export/import/vehicle documents. Premium = one-time $9.99 purchase, unlocks unlimited vehicles + PDF export + data import + vehicle documents. Not a subscription.
+Monetization: gating is off in the shipped app (`MONETIZATION_ENABLED=false`), so everything is free. Site copy: "Free. No ads, no account, no subscription." It may say a one-time unlock for power features is planned and will never be a subscription. No price, no list of gated features.
 
 Undecided: whether the site later gets a blog/calculator tool (see Evidence on Hand) — out of scope for the first build unless the user asks for it explicitly.
 
