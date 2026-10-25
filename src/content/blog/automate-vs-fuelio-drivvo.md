@@ -1,35 +1,46 @@
 ---
 title: "AutoMate vs. Fuelio vs. Drivvo: An Honest Comparison"
-description: "How AutoMate actually compares to Fuelio and Drivvo — where they're strong, where they've slipped, and why we built AutoMate anyway."
+description: "Fuelio, Drivvo and AutoMate as they stand in October 2026: prices, ads, backup, import, and where each one is the better pick."
 pubDate: 2026-07-25
+updatedDate: 2026-10-25
 ---
 
-If you're reading this, you've probably already used Fuelio or Drivvo — they're the two biggest names in car expense tracking, with millions of installs between them. This isn't a takedown. Both apps got a lot of people through years of fill-ups before we existed. Here's a straight comparison of where things actually stand.
+Fuelio and Drivvo are the two biggest car expense trackers on Android. Both list 5M+ installs on Google Play, both have been around for years, and both changed in 2026. This is where things stand on 24 October 2026, from each app's Play listing and its reviews. It is not a takedown: each of them does things AutoMate doesn't.
 
 ## Fuelio
 
-Fuelio is the most-installed app in this category, with over 6 million downloads — that scale is real and it's earned. It's free, it's been around for years, and plenty of people track their whole car history in it without complaint.
+Fuelio holds a Google Play Editors' Choice badge and a 4.22-star rating from about 136,000 ratings. Its listing now says "NOW PRO FEATURES ARE FREE (no ads!)": automatic Dropbox and Google Drive backup, a fill-up widget, the costs module and reports are free. In-app purchases from $4.99 to $15.99 are still listed, and some 2026 reviews describe a subscription.
 
-Where users report friction: chart rendering crashes on some devices, Google Drive sync has been reported as unreliable, and the interface has carried a lot of the same visual language since its early Android days. If you've been happy with Fuelio, there's no urgent reason to switch. If you've hit the sync or crash issues, or just want something that looks like it was designed this decade, that's the gap AutoMate fills.
+What reviewers like: fast logging, cost visibility, import and export, and electric vehicle support. What they complain about: crowd-sourced fuel prices that are missing or wrong, edits that revert, and no way to log an odometer reading without a fill-up.
+
+If Fuelio works for you, there is no urgent reason to leave. Its free cloud backup is something AutoMate does not have.
 
 ## Drivvo
 
-Drivvo has a similar model — free with ads, premium tier available — and around 2 million installs. The most common complaint is the ad experience inside the free tier, and Drivvo's premium pricing has reportedly risen from roughly $6/year to around $25/year over time, which is a steep trajectory for what's still fundamentally an expense logbook. Sync reliability has also been a recurring theme in reviews.
+Drivvo has a 4.35-star rating from about 116,000 ratings. It is deep: reports, reminders, an income module, a trip tracker added in 2026, and "Where to Refuel", with community fuel prices at more than 600,000 stations. Reviewers praise a developer who answers quickly.
+
+The friction is price. The free tier allows two vehicles and shows ads. Spreadsheet export, receipt attachments and the dark theme are paid. Reviewers report the premium renewal going from about $6 a year to $24.90 in February 2026 and $49.90 in April 2026. The price hike is the most common theme in its low-star reviews.
 
 ## Where AutoMate is different
 
-We didn't build AutoMate to out-feature Fuelio or Drivvo on every checkbox — both apps are mature and full-featured. We built it around three things we thought the category was missing:
+AutoMate is newer and smaller than both. It is built around a few things the category kept getting wrong:
 
-1. **No ads, ever.** Not in the free tier, not as "sponsored" content. None.
-2. **No account, no cloud, no sync to break.** Your data lives in a local database on your device. There's nothing to sync because there's no server in the loop — which also means there's nothing to break when a sync server has a bad day.
-3. **One price, once.** $9.99, one time, unlocks unlimited vehicles and the rest of premium. Not a rising annual subscription.
+1. **No ads and no subscription.** Every feature is free today. A one-time unlock for some power features is planned; it will never be a subscription.
+2. **No account.** Your records are stored on your phone. There is no AutoMate server holding them, so there is no login to fail and no sync to break.
+3. **Insights that name the change.** A drop in fuel economy, a fill-up well above your usual, a cheaper station you already use, a service that is due by your own history.
+4. **Odometer updates on their own**, so distance-based reminders stay accurate between fill-ups.
+
+## What AutoMate doesn't do
+
+Be clear about the trade-offs before you switch:
+
+- No automatic or cloud backup. You make a backup file and keep it where you like.
+- No receipt scanning, no widget, no trip log, no fuel price map.
+- No iPhone app. AutoMate is Android only.
+- It sends anonymous crash reports and anonymous usage statistics (you can turn the statistics off), so it cannot claim that nothing ever leaves your phone. Your records don't.
 
 ## Switching over
 
-If you're moving from Fuelio or Drivvo, AutoMate can import your existing export file directly — go to **Settings → Import Data** after setup. Your fill-up and service history comes with you; you don't start over.
+AutoMate imports both apps' CSV exports. Open **Settings, Import Data**, pick the file, choose the vehicle and check the preview before anything is saved. The step-by-step guides are here: [move from Fuelio](/switch-from-fuelio/) and [move from Drivvo](/switch-from-drivvo/). Drivvo lists spreadsheet export as a paid feature, so you may need an active plan to create the file.
 
-## The honest tradeoff
-
-AutoMate is newer and smaller than either of these apps. It doesn't have a decade of user reviews behind it, and it's Android-only for now — no iOS version yet. If cross-platform sync across a phone and a tablet matters to you today, neither AutoMate nor a no-cloud design is going to offer that. What you get instead is a faster, ad-free, considered app with a data model that answers "what does my car actually cost me" without digging.
-
-[See the full feature comparison](../../#compare) or [get AutoMate on Google Play](https://play.google.com/store/apps/details?id=com.arctosbuilt.automate).
+For the full side-by-side tables, see [AutoMate vs Fuelio](/vs-fuelio/) and [AutoMate vs Drivvo](/vs-drivvo/).
