@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { competitors } from '../lib/facts';
+---
+
+<BaseLayout
+  title="Page not found | AutoMate"
+  description="This page doesn't exist. Try the AutoMate home page, the app comparisons or the blog."
+  path="/404/"
+  ogSlug="home"
+  noindex
+>
+  <div class="nf wrap">
+    <h1>No page at this address.</h1>
+    <p class="lede">The link may be old or mistyped. These are the places most people are looking for:</p>
+    <ul>
+      <li><a href="/">AutoMate home</a></li>
+      <li><a href="/alternatives/">Car expense tracker alternatives</a></li>
+      {competitors.slice(0, 2).map((c) => <li><a href={`/vs-${c.slug}/`}>AutoMate vs {c.name}</a></li>)}
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .nf {
+    display: grid;
+    gap: var(--space-md);
+    padding-block: var(--space-2xl) 0;
+  }
+  .nf h1 {
+    font-size: clamp(2.25rem, 3.4vw + 1rem, 3.5rem);
+    max-width: 14ch;
+  }
+  .nf ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: var(--space-xs);
+  }
+</style>

@@ -1,148 +1,148 @@
 ---
+// Restates the AutoMate app's privacy policy (automate-v2/docs/PRIVACY-POLICY.md)
+// for the app as shipped on Google Play. The drive-recording sections in that
+// file describe a feature that has not shipped yet; add them here when it does.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
+import { APP_PRIVACY_URL, CONTACT_EMAIL } from '../lib/facts';
+
+const path = '/privacy/';
 ---
 
 <BaseLayout
-  title="Privacy Policy — AutoMate"
-  description="AutoMate's privacy policy: your car data stays on your device. No accounts, no ads, no ad tracking, no data selling."
-  path="/privacy/"
+  title="Privacy policy | AutoMate car expense tracker"
+  description="What the AutoMate app stores, what it sends and what it never does: records on your phone, no account, no ads, anonymous crash reports and usage statistics."
+  path={path}
+  ogSlug="privacy"
+  breadcrumbs={[{ name: 'Privacy', path }]}
 >
-  <Nav />
-  <main id="main">
-    <article class="policy">
-      <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: May 15, 2026</p>
+  <article class="doc wrap">
+    <header class="doc-head">
+      <h1>Privacy policy</h1>
+      <p class="lede">
+        This is the privacy policy of the AutoMate Android app, written out for this website. The copy linked from
+        inside the app is at <a href={APP_PRIVACY_URL}>{APP_PRIVACY_URL.replace('https://', '')}</a>. If the two ever
+        differ, that one applies.
+      </p>
+    </header>
 
-      <p>
-        AutoMate is a car expense tracking app that keeps all your data on
-        your device. This policy explains what the app handles, how it
-        handles it, and what permissions it requests. This website itself
-        sets no cookies and runs no analytics or tracking scripts of any
-        kind — it's a static page.
-      </p>
-
-      <h2>Data Storage</h2>
-      <p>
-        All data you enter into AutoMate — vehicles, fuel logs, service
-        records, expenses, reminders, and settings — is stored locally on
-        your device in a SQLite database. Your data never leaves your device
-        unless you explicitly choose to export or back it up.
-      </p>
-      <p>
-        There is no cloud storage, no server, and no remote database.
-        AutoMate does not transmit any data over the internet, with one
-        exception: if you enter a VIN, the app sends that VIN to the free
-        NHTSA public API to look up your vehicle's year, make, and model. No
-        other data is sent.
-      </p>
-
-      <h2>Data Collection</h2>
-      <h3>Usage Analytics</h3>
-      <p>
-        AutoMate collects anonymous usage data (app opens, feature usage) via
-        Firebase Analytics to improve the app — no personally identifiable
-        information. You can disable this at any time in Settings → Privacy
-        → Share Usage Data.
-      </p>
-      <h3>Crash Reporting</h3>
-      <p>
-        AutoMate collects anonymous crash reports via Firebase Crashlytics
-        (stack traces, device/OS/app version) to maintain stability. No
-        personal information is included.
-      </p>
-      <h3>What We Don't Collect</h3>
+    <section>
+      <h2>The short version</h2>
       <ul>
-        <li>No advertising SDKs or ad tracking</li>
-        <li>No user profiling or behavioral tracking</li>
-        <li>No cookies or web beacons</li>
-        <li>No data sold or shared with third parties</li>
-        <li>No personally identifiable information</li>
+        <li>Your vehicles, fill-ups, services, expenses and reminders are stored on your phone. There is no AutoMate account or cloud copy.</li>
+        <li>The app shows no ads and sells no data.</li>
+        <li>It sends anonymous crash reports and anonymous usage statistics. You can turn usage statistics off.</li>
+        <li>A VIN you look up is sent to the US government’s free NHTSA database. Nothing else about your car is.</li>
       </ul>
+    </section>
 
-      <h2>Account Creation</h2>
+    <section>
+      <h2>Data storage</h2>
       <p>
-        AutoMate does not require or offer account creation. There is no
-        sign-up, no login, and no user account.
+        Everything you enter (vehicles, fuel logs, service records, expenses, reminders and settings) is stored locally
+        on your device in a SQLite database. There is no AutoMate account, cloud storage or remote database for your
+        records. Your records leave your device only when you choose to export or back them up.
       </p>
+      <p>AutoMate sends limited data over the internet only in these cases:</p>
+      <ul>
+        <li>
+          <strong>VIN lookup.</strong> If you enter or scan a VIN (Vehicle Identification Number), the app sends that VIN
+          to the free NHTSA public API to look up your vehicle’s year, make and model.
+        </li>
+        <li>
+          <strong>Install notification.</strong> Once per install, the app sends its version, your device’s OS and OS
+          version, device brand and model, and language setting to the developer. It contains none of your records, no
+          location and no personal information.
+        </li>
+        <li><strong>Usage analytics and crash reports,</strong> described below.</li>
+      </ul>
+    </section>
 
-      <h2>Advertising</h2>
-      <p>AutoMate contains no advertisements of any kind.</p>
+    <section>
+      <h2>Usage analytics</h2>
+      <p>
+        AutoMate collects anonymous usage data through Firebase Analytics to improve the app: app opens and session
+        length, which features are used (for example adding a fill-up or creating a reminder), screen navigation, and
+        device type and OS version. It includes no personally identifiable information.
+      </p>
+      <p>
+        You can turn this off at any time in <strong>Settings, Privacy, Share Usage Data</strong>. When it is off, no
+        analytics events are sent.
+      </p>
+    </section>
 
+    <section>
+      <h2>Crash reports</h2>
+      <p>
+        AutoMate collects anonymous crash reports through Firebase Crashlytics to keep the app stable: stack traces and
+        error details, device type, OS and app version, and a short log of the steps leading to the crash. Crash
+        reporting is always on and cannot be turned off. Crash reports contain no personal information.
+      </p>
+    </section>
+
+    <section>
+      <h2>What the app does not do</h2>
+      <ul>
+        <li>No advertising SDKs or ad tracking.</li>
+        <li>No user profiling.</li>
+        <li>No cookies or web beacons.</li>
+        <li>No data sold or shared with third parties.</li>
+        <li>No collection of names, email addresses or phone numbers.</li>
+        <li>No account: no sign-up, no login.</li>
+      </ul>
+    </section>
+
+    <section>
       <h2>Permissions</h2>
+      <p>Each permission is requested only when you take an action that needs it, never on first launch.</p>
+      <h3>Camera</h3>
       <p>
-        Each permission below is requested only when you take an action that
-        requires it — never on first launch or in the background.
+        When you tap the camera button to photograph a receipt or your vehicle, or to scan a VIN barcode. Photos are
+        saved in the app’s own storage. The camera is never used in the background.
       </p>
-      <ul>
-        <li><strong>Camera</strong> — only when you photograph a receipt or vehicle.</li>
-        <li><strong>Photo Library</strong> — only when you pick an existing photo to attach.</li>
-        <li><strong>Location</strong> — only when you tap "Use current location" for a station or shop.</li>
-        <li><strong>Notifications</strong> — only after you create your first maintenance reminder; generated entirely on-device.</li>
-      </ul>
-
-      <h2>Data Export &amp; Backup</h2>
+      <h3>Photo library</h3>
       <p>
-        Export your data anytime as CSV, filterable by vehicle and date
-        range, shared through your device's standard share sheet. Backups
-        are entirely local and manual — there is no automatic cloud backup.
+        When you tap the gallery button to attach an existing photo. Only the photo you pick is copied into the app.
       </p>
+      <h3>Location</h3>
+      <p>
+        When you tap “Use current location” while adding a gas station or service shop. AutoMate reads your position
+        once and saves it with that place, on your device. It does not track your location in the background.
+      </p>
+      <h3>Notifications</h3>
+      <p>
+        When you create your first maintenance reminder. Reminder notifications are generated on your device; no
+        notification data goes to or from a server.
+      </p>
+    </section>
 
-      <h2>Children's Privacy</h2>
+    <section>
+      <h2>Export, backup and restore</h2>
+      <p>
+        You can export your data as CSV or PDF at any time, filtered by vehicle and date range. You can also back up
+        your database to a file and restore it later. Both are shared through your phone’s standard share sheet, so you
+        decide where the file goes. There is no automatic cloud backup.
+      </p>
+    </section>
+
+    <section>
+      <h2>This website</h2>
+      <p>
+        automateapp.info sets no cookies and runs no analytics or tracking scripts. It is a static site hosted on GitHub
+        Pages, which may keep standard server logs.
+      </p>
+    </section>
+
+    <section>
+      <h2>Children</h2>
       <p>AutoMate is not directed at children under 13 and does not knowingly collect information from children.</p>
+    </section>
 
-      <h2>Contact</h2>
+    <section>
+      <h2>Changes and contact</h2>
       <p>
-        Questions about this policy or the app: <a href="mailto:arctos.built@gmail.com">arctos.built@gmail.com</a>
+        When the policy changes, the updated version ships with the app update and the date on the in-app policy changes
+        with it. Questions go to the developer at <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
-    </article>
-  </main>
-  <Footer />
+    </section>
+  </article>
 </BaseLayout>
-
-<style>
-  .policy {
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
-  }
-  h1 {
-    font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
-    font-weight: 800;
-    color: var(--ink);
-  }
-  .updated {
-    color: var(--ink-muted);
-    font-size: 0.9rem;
-    margin-bottom: var(--space-2xl);
-  }
-  h2 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-top: var(--space-2xl);
-    margin-bottom: var(--space-md);
-  }
-  h3 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-top: var(--space-xl);
-    margin-bottom: var(--space-sm);
-  }
-  p,
-  li {
-    color: var(--ink-secondary);
-  }
-  ul {
-    padding-left: 1.2rem;
-  }
-  li {
-    margin-bottom: var(--space-xs);
-  }
-  a {
-    color: var(--primary);
-    font-weight: 600;
-  }
-</style>

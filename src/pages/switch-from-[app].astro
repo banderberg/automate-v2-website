@@ -1,0 +1,290 @@
+---
+// Migration guides. Every AutoMate-side step mirrors the app's real import flow
+// (automate-v2: app/(modals)/import.tsx, src/hooks/useImportWorkflow.ts,
+// src/services/import/*, importModal.* strings): Settings > Import Data >
+// Select File (CSV, under 5 MB) > format detected > Import Into Vehicle >
+// Preview > Import > result, with undo from Settings > Import History.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Shot from '../components/Shot.astro';
+import PlayLink from '../components/PlayLink.astro';
+import settingsShot from '../assets/screens/settings.png';
+import { RESEARCH_DATE } from '../lib/facts';
+
+interface Guide {
+  slug: 'fuelio' | 'drivvo';
+  name: string;
+  exportStep: string;
+  exportNote: string;
+  carried: string[];
+  notCarried: string;
+  detected: string;
+}
+
+const guides: Guide[] = [
+  {
+    slug: 'fuelio',
+    name: 'Fuelio',
+    exportStep:
+      'In Fuelio, use its backup or export option and save your data as a CSV file somewhere you can browse to on the phone, such as Downloads or your cloud drive.',
+    exportNote:
+      'You have the right file if it opens with sections called “## Vehicle” and “## Log”. Fuelio’s menus move between versions, so look for the CSV option rather than a specific menu name.',
+    carried: [
+      'Fill-ups: date, odometer, volume, price, full or partial fill, and notes.',
+      'The city of each fill-up, saved as a place.',
+      'Fuelio costs: service categories become service entries, the rest become expenses, with their notes.',
+    ],
+    notCarried:
+      'Trips, photos and Fuelio’s own statistics stay behind. AutoMate recalculates economy and cost per mile from the imported entries.',
+    detected: 'Fuelio Export',
+  },
+  {
+    slug: 'drivvo',
+    name: 'Drivvo',
+    exportStep:
+      'In Drivvo, export your records as a CSV spreadsheet and save the file somewhere you can browse to on the phone, such as Downloads or your cloud drive.',
+    exportNote:
+      'Drivvo lists spreadsheet export as a paid feature, so you may need an active Drivvo plan to create the file. The file holds sections for refuelling, services and expenses.',
+    carried: [
+      'Refuelling: date, odometer, volume, price, fill type, station and notes.',
+      'Services and expenses: type, cost, place and notes.',
+      'Gas stations and shops, saved as places.',
+    ],
+    notCarried:
+      'Reminders, attachments and anything outside the refuelling, service and expense sections stay behind. Set your reminders again in AutoMate.',
+    detected: 'Drivvo Export',
+  },
+];
+
+export function getStaticPaths() {
+  return [{ params: { app: 'fuelio' } }, { params: { app: 'drivvo' } }];
+}
+
+const { app } = Astro.params;
+const g = guides.find((x) => x.slug === app);
+if (!g) throw new Error(`No guide for ${app}`);
+
+const path = `/switch-from-${g.slug}/`;
+const title = `How to move from ${g.name} to AutoMate (import your ${g.name} CSV)`;
+const description = `Step by step: export your ${g.name} history as CSV and import it into AutoMate, a free car expense tracker with no ads and no account. What carries over and what does not.`;
+
+const steps = [
+  { name: `Export your data from ${g.name}`, text: `${g.exportStep} ${g.exportNote}` },
+  {
+    name: 'Install AutoMate',
+    text: 'Install AutoMate from Google Play and finish the short setup. It needs no account.',
+  },
+  {
+    name: 'Open Import Data',
+    text: `In AutoMate, open Settings, then Import Data, and tap Select File. Pick your ${g.name} CSV. Files must be under 5 MB. AutoMate recognises the format and shows “${g.detected}”.`,
+  },
+  {
+    name: 'Choose the vehicle',
+    text: 'Under Import Into Vehicle, pick the car the history belongs to, or tap Add New Vehicle. Make sure the vehicle uses the same distance unit as the file; AutoMate warns you if the file is in kilometres and the car is set to miles, or the other way round.',
+  },
+  {
+    name: 'Check the preview',
+    text: 'Tap Preview. You see the number of entries, the date range and any rows that could not be read. If the dates could be read two ways, AutoMate says which format it used. It also flags odometer readings that look out of order.',
+  },
+  {
+    name: 'Import',
+    text: 'Tap Import. The result screen shows how many entries came in, how many places were created and how many duplicates were skipped.',
+  },
+  {
+    name: 'Check your history',
+    text: 'Open History to look through the imported entries. If something is off, delete the whole import from Settings, Import History, and try again. If you track several cars, repeat the steps for each one.',
+  },
+];
+
+const site = Astro.site ?? new URL('https://automateapp.info');
+const howTo = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: `Move from ${g.name} to AutoMate`,
+  description,
+  totalTime: 'PT10M',
+  supply: [{ '@type': 'HowToSupply', name: `A CSV export from ${g.name}` }],
+  tool: [{ '@type': 'HowToTool', name: 'An Android phone with AutoMate installed' }],
+  step: steps.map((s, i) => ({
+    '@type': 'HowToStep',
+    position: i + 1,
+    name: s.name,
+    text: s.text,
+    url: new URL(`${path}#step-${i + 1}`, site).toString(),
+  })),
+  dateModified: RESEARCH_DATE,
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path={path}
+  ogSlug={`switch-from-${g.slug}`}
+  ogType="article"
+  structuredData={[howTo]}
+  breadcrumbs={[
+    { name: 'Alternatives', path: '/alternatives/' },
+    { name: `Switch from ${g.name}`, path },
+  ]}
+>
+  <article class="guide wrap">
+    <header class="guide-head">
+      <h1>Move your {g.name} history to AutoMate</h1>
+      <p class="lede">
+        AutoMate reads {g.name}’s CSV export directly. It takes about ten minutes, and you see a preview before
+        anything is saved.
+      </p>
+    </header>
+
+    <div class="guide-body">
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li id={`step-${i + 1}`}>
+              <h2>{s.name}</h2>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <aside class="guide-side" aria-label="Where to find Import Data">
+        <figure>
+          <Shot
+            src={settingsShot}
+            alt="AutoMate Settings screen with the Data section: Backup Data, Restore Data and, at the bottom, Import Data."
+            pins={[{ n: 1, x: 62, y: 89 }]}
+            sizes="(min-width: 60rem) 260px, 70vw"
+          />
+          <figcaption><span class="pin-key" aria-hidden="true">1</span> Settings, Import Data.</figcaption>
+        </figure>
+      </aside>
+    </div>
+
+    <section class="carry" aria-labelledby="carry-title">
+      <h2 id="carry-title">What comes across</h2>
+      <ul>{g.carried.map((c) => <li>{c}</li>)}</ul>
+      <p>{g.notCarried}</p>
+    </section>
+
+    <section class="guide-cta" aria-labelledby="cta-title">
+      <h2 id="cta-title">Ready when you are</h2>
+      <p class="muted">Free. No ads, no account, no subscription. Android only.</p>
+      <PlayLink />
+      <p><a href={`/vs-${g.slug}/`}>Read the full AutoMate vs {g.name} comparison</a></p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .guide {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl) 0;
+  }
+  .guide-head {
+    display: grid;
+    gap: var(--space-md);
+  }
+  .guide-head h1 {
+    font-size: clamp(2.25rem, 3.6vw + 1rem, 3.75rem);
+    max-width: 16ch;
+  }
+  .guide-body {
+    display: grid;
+    gap: var(--space-xl);
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+    display: grid;
+    gap: var(--space-lg);
+    max-width: 42rem;
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: var(--space-md);
+    row-gap: var(--space-2xs);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .steps li::before {
+    content: counter(step);
+    grid-row: span 2;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-lg);
+    line-height: 1.1;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .steps h2 {
+    font-size: var(--text-md);
+  }
+  .steps p {
+    color: var(--color-ink-2);
+  }
+  .guide-side figure {
+    margin: 0;
+    display: grid;
+    gap: var(--space-sm);
+    width: min(100%, 16rem);
+  }
+  .guide-side :global(.shot) {
+    aspect-ratio: 1080 / 2235;
+  }
+  .guide-side figcaption {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-ink-2);
+  }
+  .pin-key {
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-pin);
+    color: var(--color-on-pin);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 0.6875rem;
+  }
+  @media (min-width: 60rem) {
+    .guide-body {
+      grid-template-columns: minmax(0, 1fr) 16rem;
+      gap: var(--space-2xl);
+    }
+    .guide-side {
+      position: sticky;
+      top: var(--space-lg);
+      align-self: start;
+    }
+  }
+  .carry {
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 42rem;
+  }
+  .carry ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: var(--space-xs);
+    color: var(--color-ink-2);
+  }
+  .carry p {
+    color: var(--color-ink-2);
+  }
+  .guide-cta {
+    display: grid;
+    gap: var(--space-sm);
+    justify-items: start;
+  }
+</style>

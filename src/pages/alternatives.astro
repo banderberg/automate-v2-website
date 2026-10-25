@@ -1,0 +1,172 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlayLink from '../components/PlayLink.astro';
+import { competitors, RESEARCH_DATE, RESEARCH_DATE_LABEL } from '../lib/facts';
+
+const path = '/alternatives/';
+const title = 'Car expense tracker alternatives 2026: Fuelio, Drivvo, My Cars and more';
+const description =
+  'Looking for an alternative to Fuelio, Drivvo, My Cars, Simply Auto, aCar or CARFAX Car Care? Honest side-by-side comparisons with AutoMate, checked October 2026.';
+
+const site = Astro.site ?? new URL('https://automateapp.info');
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'AutoMate compared with other car expense trackers',
+  dateModified: RESEARCH_DATE,
+  itemListElement: competitors.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: `AutoMate vs ${c.name}`,
+    url: new URL(`/vs-${c.slug}/`, site).toString(),
+  })),
+};
+
+const importLabel = {
+  importer: 'AutoMate imports its CSV',
+  coming: 'Import coming, no date yet',
+  manual: 'Start fresh in AutoMate',
+} as const;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  path={path}
+  ogSlug="alternatives"
+  structuredData={[itemList]}
+  breadcrumbs={[{ name: 'Alternatives', path }]}
+>
+  <div class="alts wrap">
+    <header class="alts-head">
+      <h1>Car expense tracker alternatives in 2026</h1>
+      <p class="lede">
+        Six apps people leave for AutoMate, and what each one still does better. Every competitor fact comes from its
+        Google Play listing and reviews, checked on {RESEARCH_DATE_LABEL}.
+      </p>
+    </header>
+
+    <section class="pattern" aria-labelledby="pattern-title">
+      <h2 id="pattern-title">Why people switch</h2>
+      <p>
+        Across ten car apps, low-star reviews since January 2025 keep returning to the same two problems. About 55
+        describe lost data: sync, backup or restore failing, or history gone after a phone change. About 53 describe
+        pricing: a hike, a switch to subscription, or a paid unlock that stopped working. Intrusive ads and forced
+        logins are about as common.
+      </p>
+      <p>
+        AutoMate’s answer is simple: records on your phone with no account, no ads, and nothing to pay today. It is not
+        the answer to everything. It has no cloud sync, no receipt scanning and no iPhone app, and the pages below say
+        where a competitor is the better choice.
+      </p>
+    </section>
+
+    <section aria-labelledby="list-title">
+      <h2 id="list-title" class="visually-hidden">Comparisons</h2>
+      <ol class="alt-list">
+        {
+          competitors.map((c) => (
+            <li class="alt-item">
+              <h3>
+                <a href={`/vs-${c.slug}/`}>AutoMate vs {c.name}</a>
+              </h3>
+              <p class="alt-line">{c.oneLine}</p>
+              <p class="alt-snap">{c.snapshot}</p>
+              <p class="alt-import">{importLabel[c.switching.kind]}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="alts-cta" aria-labelledby="alts-cta-title">
+      <h2 id="alts-cta-title">Try it alongside your current app</h2>
+      <p class="muted">
+        AutoMate is free and needs no account, so you can run it next to the app you use now and decide later.
+      </p>
+      <PlayLink />
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .alts {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-block: var(--space-xl) 0;
+  }
+  .alts-head {
+    display: grid;
+    gap: var(--space-md);
+  }
+  .alts-head h1 {
+    font-size: clamp(2.25rem, 3.6vw + 1rem, 3.75rem);
+    max-width: 18ch;
+  }
+  .pattern {
+    display: grid;
+    gap: var(--space-md);
+    max-width: var(--measure);
+  }
+  .pattern p {
+    color: var(--color-ink-2);
+  }
+  .alt-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    border-top: 2px solid var(--color-ink);
+  }
+  .alt-item {
+    display: grid;
+    gap: var(--space-2xs) var(--space-xl);
+    padding-block: var(--space-lg);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .alt-item h3 {
+    font-size: var(--text-lg);
+  }
+  .alt-item h3 a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+  .alt-item h3 a:hover {
+    color: var(--color-link);
+    text-decoration: underline;
+  }
+  .alt-line {
+    color: var(--color-ink);
+  }
+  .alt-snap {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+  .alt-import {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-ink-2);
+  }
+  @media (min-width: 56rem) {
+    .alt-item {
+      grid-template-columns: 17rem minmax(0, 1fr) 13rem;
+      align-items: baseline;
+    }
+    .alt-item h3 {
+      grid-row: span 2;
+    }
+    .alt-snap {
+      grid-column: 2;
+    }
+    .alt-import {
+      grid-column: 3;
+      grid-row: 1;
+      text-align: right;
+    }
+  }
+  .alts-cta {
+    display: grid;
+    gap: var(--space-sm);
+    justify-items: start;
+  }
+</style>
