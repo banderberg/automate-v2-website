@@ -3,7 +3,7 @@
 // for the app as shipped on Google Play. The drive-recording sections in that
 // file describe a feature that has not shipped yet; add them here when it does.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { APP_PRIVACY_URL, CONTACT_EMAIL } from '../lib/facts';
+import { CONTACT_EMAIL } from '../lib/facts';
 
 const path = '/privacy/';
 ---
@@ -19,9 +19,8 @@ const path = '/privacy/';
     <header class="doc-head">
       <h1>Privacy policy</h1>
       <p class="lede">
-        This is the privacy policy of the AutoMate Android app, written out for this website. The copy linked from
-        inside the app is at <a href={APP_PRIVACY_URL}>{APP_PRIVACY_URL.replace('https://', '')}</a>. If the two ever
-        differ, that one applies.
+        This is the privacy policy of the AutoMate Android app. This page is the governing copy; the app and its
+        Play Store listing link here.
       </p>
     </header>
 

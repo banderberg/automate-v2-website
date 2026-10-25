@@ -23,8 +23,8 @@ export const RESEARCH_DATE_LABEL = '24 October 2026';
 
 export const CONTACT_EMAIL = 'arctos.built@gmail.com';
 
-/** The app's own privacy policy, as linked from Settings > About in the app. */
-export const APP_PRIVACY_URL = 'https://banderberg.github.io/arctoslabs/privacy.html';
+/** Canonical privacy policy URL: this site's own page. The Play listing and the app's Settings > About should point here. */
+export const APP_PRIVACY_URL = 'https://automateapp.info/privacy/';
 
 export const PRICING_LINE = 'Free. No ads, no account, no subscription.';
 
