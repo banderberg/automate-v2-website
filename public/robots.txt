@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://banderberg.github.io/automate-v2-website/sitemap-index.xml
+Sitemap: https://automateapp.info/sitemap-index.xml

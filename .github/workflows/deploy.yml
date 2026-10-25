@@ -32,6 +32,6 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 
-# Custom domain later: add a `public/CNAME` file containing the domain,
-# set astro.config.mjs `site` to that domain, remove `base` entirely, and
-# update robots.txt's Sitemap line and DESIGN.md/PRODUCT.md's placeholder note.
+# Custom domain: public/CNAME holds automateapp.info and astro.config.mjs
+# sets `site` to https://automateapp.info with no `base`. In the repo's
+# Settings > Pages, set the custom domain to automateapp.info and enforce HTTPS.
