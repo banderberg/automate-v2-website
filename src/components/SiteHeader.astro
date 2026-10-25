@@ -1,0 +1,74 @@
+---
+// N1a: wordmark, two destinations, one install link. The site has exactly two
+// places worth navigating to from every page (comparisons and the blog); the
+// rest lives in the footer.
+import { Image } from 'astro:assets';
+import icon from '../assets/icon.png';
+import PlayLink from './PlayLink.astro';
+
+const path = Astro.url.pathname;
+const isCompare = path.startsWith('/alternatives') || path.startsWith('/vs-') || path.startsWith('/switch-from-');
+const isBlog = path.startsWith('/blog');
+---
+
+<header class="site-header wrap">
+  <a class="brand" href="/" aria-label="AutoMate home">
+    <Image src={icon} alt="" width={32} height={32} densities={[1, 2, 3]} loading="eager" class="brand-icon" />
+    <span class="brand-name">AutoMate</span>
+  </a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="/alternatives/" aria-current={isCompare ? 'page' : undefined}>Compare</a>
+    <a href="/blog/" aria-current={isBlog ? 'page' : undefined}>Blog</a>
+  </nav>
+  <PlayLink size="small" label="Get the app" />
+</header>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding-block: var(--space-md);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    text-decoration: none;
+    color: var(--color-ink);
+    margin-right: auto;
+  }
+  .brand-icon {
+    border-radius: 8px;
+  }
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-md);
+    letter-spacing: -0.02em;
+  }
+  .site-nav {
+    display: none;
+    gap: var(--space-lg);
+  }
+  .site-nav a {
+    color: var(--color-ink-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    padding-block: var(--space-xs);
+  }
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'] {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4em;
+  }
+  @media (min-width: 34rem) {
+    .site-nav {
+      display: flex;
+    }
+  }
+</style>

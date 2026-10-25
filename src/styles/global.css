@@ -1,70 +1,104 @@
-@import '@fontsource/archivo/500.css';
-@import '@fontsource/archivo/700.css';
-@import '@fontsource/archivo/800.css';
-@import '@fontsource/archivo/900.css';
-@import '@fontsource/public-sans/400.css';
-@import '@fontsource/public-sans/500.css';
-@import '@fontsource/public-sans/600.css';
+/* Hallmark · genre: editorial · macrostructure: Workbench · theme: custom (brand-locked to the AutoMate app's DESIGN.md hex tokens) · enrichment: none (real product screenshots) · nav: N1a · footer: Ft1
+ * tone: composed, ledger-precise · anchor hue: AutoMate blue #4272C4 · display: Archivo 800 · body: Public Sans 400/600
+ */
+
+@import '@fontsource/archivo/latin-800.css';
+@import '@fontsource/archivo/latin-600.css';
+@import '@fontsource/public-sans/latin-400.css';
+@import '@fontsource/public-sans/latin-600.css';
 
 /*
-  Tokens mirror automate-v2/DESIGN.md verbatim for the accent + body-register
-  colors (this site is a sibling of the app, not a new brand). The `road`,
-  `road-line`, `sign-panel`, and `ticket-paper` tokens are new — the
-  night-highway hero/footer register — see this project's own DESIGN.md.
+  Colour tokens are the app's own (automate-v2/DESIGN.md), so the site reads as
+  the same product. Two additions: --color-link is a deeper step of the brand
+  blue, because #4272C4 as small text on the warm paper measures ~4.3:1 and
+  fails AA; and the event colours are only ever used as small non-text marks.
 */
 :root {
-  /* body register (app's real light tokens) */
-  --surface: #f5f4f1;
-  --card: #fefdfb;
-  --divider: #e2e0db;
-  --divider-subtle: #f0efec;
-  --ink: #1c1b18;
-  --ink-secondary: #5c5a55;
-  --ink-muted: #706c67;
+  color-scheme: light dark;
 
-  /* accent (identical hex to the app) */
-  --primary: #4272c4;
-  --primary-light: #dbe6f5;
-  --primary-dark: #1e3554;
-  --fuel: #1a9a8f;
-  --fuel-light: #d0f5ee;
-  --service: #e8772b;
-  --service-light: #fff3e6;
-  --expense: #2ead76;
-  --expense-light: #d5f2e3;
-  --destructive: #e05252;
-  --destructive-light: #fde8e8;
+  --color-paper: #f5f4f1;
+  --color-card: #fefdfb;
+  --color-rule: #e2e0db;
+  --color-rule-soft: #f0efec;
+  --color-ink: #1c1b18;
+  --color-ink-2: #5c5a55;
+  --color-muted: #706c67;
 
-  /* night-highway register */
-  --road: #0b0c0e;
-  --road-line: #3a3d42;
-  --sign-panel: #15171a;
-  --ticket-paper: #f5f4f1;
+  --color-brand: #4272c4;
+  --color-on-brand: #fefdfb;
+  --color-brand-press: #3560a8;
+  --color-link: #3560a8;
+  --color-tint: #dbe6f5;
+  --color-on-tint: #1e3554;
+  --color-focus: #3560a8;
 
-  --font-display: 'Archivo', system-ui, sans-serif;
-  --font-body: 'Public Sans', system-ui, sans-serif;
+  --color-fuel: #1a9a8f;
+  --color-service: #e8772b;
+  --color-expense: #2ead76;
+  --color-pin: #1c1b18;
+  --color-on-pin: #fefdfb;
 
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 0.75rem;
-  --space-lg: 1rem;
-  --space-xl: 1.5rem;
-  --space-2xl: 2rem;
-  --space-3xl: 3rem;
-  --space-4xl: 5rem;
+  --shadow-shot: 0 1px 2px rgb(28 27 24 / 0.06), 0 12px 32px -12px rgb(28 27 24 / 0.18);
 
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* 1.25 type scale, 16px base */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.5625rem;
+  --text-xl: clamp(1.75rem, 1.6vw + 1.2rem, 2.44rem);
+  --text-display: clamp(2.5rem, 4.4vw + 1rem, 4.6rem);
+
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --measure: 65ch;
+  --page-max: 74rem;
+
+  --radius-sm: 6px;
   --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --radius-shot: 22px;
 
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
 
-  /* z-scale */
-  --z-sticky: 10;
-  --z-dropdown: 20;
-  --z-modal: 30;
-  --z-toast: 40;
+  --z-raised: 10;
+  --z-sticky: 200;
+  --z-toast: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #0e0e0c;
+    --color-card: #1a1917;
+    --color-rule: #2a2926;
+    --color-rule-soft: #22211e;
+    --color-ink: #f5f4f1;
+    --color-ink-2: #c5c2bc;
+    --color-muted: #a19d96;
+    --color-brand: #4272c4;
+    --color-brand-press: #5a86d0;
+    --color-link: #8db7e6;
+    --color-tint: #1e3554;
+    --color-on-tint: #dbe6f5;
+    --color-focus: #8db7e6;
+    --color-pin: #f5f4f1;
+    --color-on-pin: #1c1b18;
+    --shadow-shot: 0 0 0 1px #2a2926;
+  }
 }
 
 *,
@@ -74,58 +108,119 @@
 }
 
 html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body);
-  color: var(--ink);
-  background: var(--surface);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  font-feature-settings: 'kern';
   -webkit-font-smoothing: antialiased;
-  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    font-weight: 400;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  margin: 0;
+  font-weight: 800;
+  font-style: normal;
+  color: var(--color-ink);
   text-wrap: balance;
-  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--text-display);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+h2 {
+  font-size: var(--text-xl);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: var(--text-md);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+p,
+li,
+dd {
+  text-wrap: pretty;
 }
 
 p {
-  text-wrap: pretty;
-  max-width: 65ch;
-}
-
-img,
-svg {
-  max-width: 100%;
-  display: block;
+  margin: 0;
 }
 
 a {
-  color: inherit;
+  color: var(--color-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
-.tabular-nums {
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+strong {
+  font-weight: 600;
+}
+
+.tnum {
   font-variant-numeric: tabular-nums;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.lede {
+  font-size: var(--text-md);
+  color: var(--color-ink-2);
+  max-width: 34rem;
+}
+
+.muted {
+  color: var(--color-muted);
 }
 
 .visually-hidden {
@@ -138,4 +233,195 @@ a {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Primary install button: the only filled element on any page. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 48px;
+  padding: 0 var(--space-lg);
+  border-radius: 999px;
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-base);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-micro) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+
+.btn:hover {
+  background: var(--color-brand-press);
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn svg {
+  flex: none;
+}
+
+.btn--small {
+  min-height: 40px;
+  padding: 0 var(--space-md);
+  font-size: var(--text-sm);
+}
+
+/* Section rhythm is deliberately uneven: see each section's own padding. */
+.section-head {
+  display: grid;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  max-width: 40rem;
+}
+
+.section-head p {
+  color: var(--color-ink-2);
+}
+
+/* Category marks, mirroring the app's fuel / service / expense colours. */
+.mark {
+  display: inline-block;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--color-rule);
+  flex: none;
+}
+
+.mark--fuel {
+  background: var(--color-fuel);
+}
+
+.mark--service {
+  background: var(--color-service);
+}
+
+.mark--expense {
+  background: var(--color-expense);
+}
+
+.mark--neutral {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Long-form pages: privacy policy and blog posts. */
+.doc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xl);
+  padding-block: var(--space-xl) 0;
+  max-width: calc(44rem + 2 * var(--gutter));
+  margin-inline: 0;
+}
+
+.doc a {
+  overflow-wrap: anywhere;
+}
+
+.doc-head {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.doc-head h1 {
+  font-size: clamp(2.25rem, 3.4vw + 1rem, 3.5rem);
+}
+
+.doc section,
+.doc-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-sm);
+}
+
+.doc h2 {
+  font-size: var(--text-lg);
+  margin-top: var(--space-sm);
+}
+
+.doc h3 {
+  margin-top: var(--space-xs);
+}
+
+.doc p,
+.doc li {
+  color: var(--color-ink-2);
+}
+
+.doc strong {
+  color: var(--color-ink);
+}
+
+.doc ul,
+.doc ol {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.doc th,
+.doc td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-xs) var(--space-sm) var(--space-xs) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.doc th {
+  color: var(--color-ink);
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-ink);
+}
+
+.doc .table-wrap {
+  overflow-x: auto;
+}
+
+.doc pre {
+  margin: 0;
+  padding: var(--space-md);
+  background: var(--color-card);
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-size: var(--text-sm);
+}
+
+.doc code {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-size: 0.92em;
+  color: var(--color-ink);
+}
+
+@media (min-width: 70rem) {
+  .doc {
+    margin-left: max(0px, calc((100% - var(--page-max)) / 2));
+  }
 }

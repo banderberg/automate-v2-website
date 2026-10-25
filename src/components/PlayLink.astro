@@ -1,0 +1,24 @@
+---
+// The one install call to action. Android only: there is no App Store link
+// anywhere on the site, by design.
+import { PLAY_URL } from '../lib/facts';
+
+interface Props {
+  label?: string;
+  size?: 'regular' | 'small';
+}
+
+const { label = 'Get AutoMate on Google Play', size = 'regular' } = Astro.props;
+---
+
+<a
+  class:list={['btn', size === 'small' && 'btn--small']}
+  href={PLAY_URL}
+  rel="noopener"
+  aria-label={size === 'small' ? `${label} on Google Play` : undefined}
+>
+  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+    <path d="M3 1.8v12.4c0 .5.5.8 1 .6l10.4-6.2c.4-.3.4-.9 0-1.2L4 1.2c-.5-.3-1 0-1 .6Z" fill="currentColor"></path>
+  </svg>
+  {label}
+</a>

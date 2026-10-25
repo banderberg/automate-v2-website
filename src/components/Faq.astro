@@ -1,80 +1,81 @@
 ---
-import { faqItems } from '../lib/content';
+// Native <details> disclosure: works without JavaScript and keeps every answer
+// in the HTML for search engines. Emits FAQPage JSON-LD for the same items.
+import type { FaqItem } from '../lib/facts';
+
+interface Props {
+  items: FaqItem[];
+  heading?: string;
+  id?: string;
+}
+
+const { items, heading = 'Questions', id = 'faq' } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((i) => ({
+    '@type': 'Question',
+    name: i.q,
+    acceptedAnswer: { '@type': 'Answer', text: i.a },
+  })),
+};
 ---
 
-<section class="faq" id="faq" aria-labelledby="faq-heading">
-  <div class="section-inner">
-    <h2 id="faq-heading">Questions, answered plainly.</h2>
-    <div class="faq-list">
-      {
-        faqItems.map((item) => (
-          <details class="faq-item">
-            <summary>
-              <span>{item.question}</span>
-              <span class="chevron" aria-hidden="true">+</span>
-            </summary>
-            <p>{item.answer}</p>
-          </details>
-        ))
-      }
-    </div>
+<section class="faq" aria-labelledby={`${id}-title`}>
+  <h2 id={`${id}-title`}>{heading}</h2>
+  <div class="faq-list">
+    {
+      items.map((item) => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))
+    }
   </div>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 </section>
 
 <style>
   .faq {
-    background: var(--surface);
-    padding: var(--space-4xl) clamp(1.25rem, 4vw, 3rem);
-  }
-  .section-inner {
-    max-width: 44rem;
-    margin: 0 auto;
-  }
-  h2 {
-    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.5rem);
-    font-weight: 700;
-    color: var(--ink);
-    text-align: center;
-    margin-bottom: var(--space-2xl);
+    display: grid;
+    gap: var(--space-lg);
   }
   .faq-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
+    border-top: 1px solid var(--color-rule);
+    max-width: 48rem;
   }
-  .faq-item {
-    background: var(--card);
-    border: 1px solid var(--divider);
-    border-radius: var(--radius-md);
-    padding: var(--space-lg);
+  details {
+    border-bottom: 1px solid var(--color-rule);
   }
   summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
-    cursor: pointer;
-    font-weight: 600;
-    color: var(--ink);
     list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-md);
+    padding-block: var(--space-md);
+    font-weight: 600;
+    font-size: var(--text-md);
   }
   summary::-webkit-details-marker {
     display: none;
   }
-  .chevron {
+  summary::after {
+    content: '+';
     font-family: var(--font-display);
-    font-size: 1.2rem;
-    color: var(--primary);
-    transition: transform 200ms var(--ease-out-quart);
-    flex-shrink: 0;
+    font-weight: 800;
+    color: var(--color-muted);
+    transition: transform var(--dur-short) var(--ease-out);
   }
-  .faq-item[open] .chevron {
+  details[open] summary::after {
     transform: rotate(45deg);
   }
-  .faq-item p {
-    color: var(--ink-secondary);
-    margin-top: var(--space-md);
-    padding-top: var(--space-md);
-    border-top: 1px solid var(--divider-subtle);
+  details p {
+    padding-bottom: var(--space-md);
+    color: var(--color-ink-2);
+    max-width: var(--measure);
   }
 </style>
