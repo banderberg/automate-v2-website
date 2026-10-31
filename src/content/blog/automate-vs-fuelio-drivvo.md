@@ -37,7 +37,7 @@ Be clear about the trade-offs before you switch:
 - No cloud backup of its own. You make a backup file and keep it where you like. (Android’s built-in backup may also copy your data to your Google account.)
 - No receipt scanning, no widget, no trip log, no fuel price map.
 - No iPhone app. AutoMate is Android only.
-- It sends anonymous crash reports and anonymous usage statistics (you can turn the statistics off), so it cannot claim that nothing ever leaves your phone. Your records don't.
+- It sends pseudonymous crash reports and usage statistics (you can turn the statistics off), so it cannot claim that nothing ever leaves your phone. Your records don't.
 
 ## Switching over
 

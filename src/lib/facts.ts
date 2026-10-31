@@ -147,7 +147,7 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: 'Does anything leave my phone?',
-    a: 'A little, and none of it is your records. If you use VIN lookup, the VIN is sent to the free NHTSA database. The app sends anonymous crash reports and anonymous usage statistics; you can turn the usage statistics off in Settings. Once per install it also sends the app version, device model, OS and language to the developer.',
+    a: 'A little, and none of it is your records. If you use VIN lookup, the VIN is sent to the free NHTSA database. The app sends pseudonymous crash reports and usage statistics; you can turn the usage statistics off in Settings. Once per install (retried later if it fails) it also sends the app version, device brand and model, OS, language, country or region setting and request time to the developer. Firebase services (Remote Config and App Check) also contact Google servers.',
   },
   {
     q: 'Can I bring my data from Fuelio or Drivvo?',
