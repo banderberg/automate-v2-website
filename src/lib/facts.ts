@@ -143,7 +143,7 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: 'Where are my records stored?',
-    a: 'On your phone, in a local database. AutoMate has no server or cloud copy of your records. They leave the phone only when you export or back them up yourself.',
+    a: 'On your phone, in a local database. AutoMate has no server or cloud copy of your records. They leave the phone when you export or back them up yourself, or when Android’s own backup copies them to your Google account (see the privacy policy).',
   },
   {
     q: 'Does anything leave my phone?',
@@ -163,7 +163,7 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: 'What happens to my data if I change phones?',
-    a: 'Make a backup in Settings, move the file to the new phone (through your own cloud drive, email or a cable), install AutoMate and restore it. There is no automatic cloud backup.',
+    a: 'Make a backup in Settings, move the file to the new phone (through your own cloud drive, email or a cable), install AutoMate and restore it. AutoMate has no cloud backup of its own. If Android backup is on, Android may also restore your data when you install AutoMate on the new phone, but don’t rely on it: it is skipped when the app’s data is over 25 MB.',
   },
 ];
 
