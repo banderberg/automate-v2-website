@@ -10,7 +10,7 @@ const path = '/privacy/';
 
 <BaseLayout
   title="Privacy policy | AutoMate car expense tracker"
-  description="What the AutoMate app stores, what it sends and what it never does: records on your phone, no account, no ads, anonymous crash reports and usage statistics."
+  description="What the AutoMate app stores, what it sends and what it never does: records on your phone, no account, no ads, and pseudonymous crash reports and usage statistics."
   path={path}
   ogSlug="privacy"
   breadcrumbs={[{ name: 'Privacy', path }]}
@@ -27,9 +27,9 @@ const path = '/privacy/';
     <section>
       <h2>The short version</h2>
       <ul>
-        <li>Your vehicles, fill-ups, services, expenses and reminders are stored on your phone. There is no AutoMate account or cloud copy.</li>
-        <li>The app shows no ads and sells no data.</li>
-        <li>It sends anonymous crash reports and anonymous usage statistics. You can turn usage statistics off.</li>
+        <li>Your vehicles, fill-ups, services, expenses and reminders are stored on your phone. There is no AutoMate account or AutoMate server holding them. Android’s own backup may copy them to your Google account (see below).</li>
+        <li>The app shows no ads and sells no data. Data goes only to the service providers named below.</li>
+        <li>It sends pseudonymous crash reports and usage statistics. You can turn usage statistics off.</li>
         <li>A VIN you look up is sent to the US government’s free NHTSA database. Nothing else about your car is.</li>
       </ul>
     </section>
@@ -39,7 +39,8 @@ const path = '/privacy/';
       <p>
         Everything you enter (vehicles, fuel logs, service records, expenses, reminders and settings) is stored locally
         on your device in a SQLite database. There is no AutoMate account, cloud storage or remote database for your
-        records. Your records leave your device only when you choose to export or back them up.
+        records. Your records leave your device only when you choose to export or back them up, or when Android’s
+        built-in backup copies them to your Google account (described under “Export, backup and restore”).
       </p>
       <p>AutoMate sends limited data over the internet only in these cases:</p>
       <ul>
@@ -48,9 +49,17 @@ const path = '/privacy/';
           to the free NHTSA public API to look up your vehicle’s year, make and model.
         </li>
         <li>
-          <strong>Install notification.</strong> Once per install, the app sends its version, your device’s OS and OS
-          version, device brand and model, and language setting to the developer. It contains none of your records, no
-          location and no personal information.
+          <strong>Install notification.</strong> Once per install (retried later if it fails), the app sends the
+          developer its version, your device’s OS and OS version, device brand and model, language setting, country or
+          region setting, and the time of the request. It contains none of your records and no location. A Google Cloud
+          (Firebase) Function receives it and checks, with Google Play Integrity (Firebase App Check), that it came from
+          the genuine app. It then emails the details to the developer through the email service Resend. Like any internet
+          request, this exposes your device’s IP address to those services.
+        </li>
+        <li>
+          <strong>Firebase services.</strong> Firebase Remote Config (app settings) and Firebase App Check (the app
+          integrity check) contact Google servers. They send standard app and device identifiers, including a Firebase
+          installation ID.
         </li>
         <li><strong>Usage analytics and crash reports,</strong> described below.</li>
       </ul>
@@ -59,9 +68,9 @@ const path = '/privacy/';
     <section>
       <h2>Usage analytics</h2>
       <p>
-        AutoMate collects anonymous usage data through Firebase Analytics to improve the app: app opens and session
+        AutoMate collects pseudonymous usage data through Firebase Analytics to improve the app: app opens and session
         length, which features are used (for example adding a fill-up or creating a reminder), screen navigation, and
-        device type and OS version. It includes no personally identifiable information.
+        device type and OS version. It is tied to a random Firebase installation ID, not to your name or email, and includes no names, email addresses or phone numbers.
       </p>
       <p>
         You can turn this off at any time in <strong>Settings, Privacy, Share Usage Data</strong>. When it is off, no
@@ -72,9 +81,9 @@ const path = '/privacy/';
     <section>
       <h2>Crash reports</h2>
       <p>
-        AutoMate collects anonymous crash reports through Firebase Crashlytics to keep the app stable: stack traces and
+        AutoMate collects pseudonymous crash reports through Firebase Crashlytics to keep the app stable: stack traces and
         error details, device type, OS and app version, and a short log of the steps leading to the crash. Crash
-        reporting is always on and cannot be turned off. Crash reports contain no personal information.
+        reporting is always on and cannot be turned off. Crash reports do not include your name, email address or phone number.
       </p>
     </section>
 
@@ -84,7 +93,7 @@ const path = '/privacy/';
         <li>No advertising SDKs or ad tracking.</li>
         <li>No user profiling.</li>
         <li>No cookies or web beacons.</li>
-        <li>No data sold or shared with third parties.</li>
+        <li>No data is sold. Data is shared only with the service providers described in this policy (Google and Firebase, NHTSA for VIN lookups, and Resend for the install notification).</li>
         <li>No collection of names, email addresses or phone numbers.</li>
         <li>No account: no sign-up, no login.</li>
       </ul>
@@ -119,7 +128,24 @@ const path = '/privacy/';
       <p>
         You can export your data as CSV or PDF at any time, filtered by vehicle and date range. You can also back up
         your database to a file and restore it later. Both are shared through your phone’s standard share sheet, so you
-        decide where the file goes. There is no automatic cloud backup.
+        decide where the file goes.
+      </p>
+      <h3>Android backup</h3>
+      <p>
+        AutoMate allows Android’s built-in backup. If backup is turned on in your phone’s settings, Android may copy
+        AutoMate’s data (your records database, the photos and documents you attached, and exports saved in the app) to
+        your Google account, and puts it back when you reinstall AutoMate or set up a new phone. Android and Google run
+        this backup, not AutoMate: the developer never receives this copy and cannot see it.
+      </p>
+      <p>
+        On Android 9 and later, with a screen lock set, the backup is end-to-end encrypted using your PIN, pattern or
+        password. Android usually backs up only when the phone is idle and on Wi-Fi, keeps only the latest copy, and skips
+        the backup entirely if AutoMate’s data is larger than 25 MB. You can turn it off in your phone’s backup settings
+        (usually Settings &gt; Google &gt; Backup; the path varies by phone).
+      </p>
+      <p>
+        Android can also transfer the data straight to a new phone during setup (device-to-device transfer), without
+        the cloud backup.
       </p>
     </section>
 

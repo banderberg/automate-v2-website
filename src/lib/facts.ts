@@ -143,11 +143,11 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: 'Where are my records stored?',
-    a: 'On your phone, in a local database. AutoMate has no server or cloud copy of your records. They leave the phone only when you export or back them up yourself.',
+    a: 'On your phone, in a local database. AutoMate has no server or cloud copy of your records. They leave the phone when you export or back them up yourself, or when Android’s own backup copies them to your Google account (see the privacy policy).',
   },
   {
     q: 'Does anything leave my phone?',
-    a: 'A little, and none of it is your records. If you use VIN lookup, the VIN is sent to the free NHTSA database. The app sends anonymous crash reports and anonymous usage statistics; you can turn the usage statistics off in Settings. Once per install it also sends the app version, device model, OS and language to the developer.',
+    a: 'A little, and none of it is your records. If you use VIN lookup, the VIN is sent to the free NHTSA database. The app sends pseudonymous crash reports and usage statistics; you can turn the usage statistics off in Settings. Once per install (retried later if it fails) it also sends the app version, device brand and model, OS, language, country or region setting and request time to the developer. Firebase services (Remote Config and App Check) also contact Google servers.',
   },
   {
     q: 'Can I bring my data from Fuelio or Drivvo?',
@@ -163,7 +163,7 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: 'What happens to my data if I change phones?',
-    a: 'Make a backup in Settings, move the file to the new phone (through your own cloud drive, email or a cable), install AutoMate and restore it. There is no automatic cloud backup.',
+    a: 'Make a backup in Settings, move the file to the new phone (through your own cloud drive, email or a cable), install AutoMate and restore it. AutoMate has no cloud backup of its own. If Android backup is on, Android may also restore your data when you install AutoMate on the new phone, but don’t rely on it: it is skipped when the app’s data is over 25 MB.',
   },
 ];
 
