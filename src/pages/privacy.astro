@@ -30,7 +30,7 @@ const path = '/privacy/';
         <li>Your vehicles, fill-ups, services, expenses and reminders are stored on your phone. There is no AutoMate account or AutoMate server holding them. Android’s own backup may copy them to your Google account (see below).</li>
         <li>The app shows no ads and sells no data. Data goes only to the service providers named below.</li>
         <li>It sends pseudonymous crash reports and usage statistics. You can turn usage statistics off.</li>
-        <li>A VIN you look up is sent to the US government’s free NHTSA database. Nothing else about your car is.</li>
+        <li>To check for safety recalls, each vehicle’s year, make and model are sent to the US government’s free NHTSA recall service, and a saved VIN to NHTSA’s VIN decoder. You can turn recall checks off.</li>
       </ul>
     </section>
 
@@ -47,6 +47,15 @@ const path = '/privacy/';
         <li>
           <strong>VIN lookup.</strong> If you enter or scan a VIN (Vehicle Identification Number), the app sends that VIN
           to the free NHTSA public API to look up your vehicle’s year, make and model.
+        </li>
+        <li>
+          <strong>Recall checks.</strong> To find safety recalls and commonly reported problems, the app periodically
+          sends each vehicle’s year, make and model to the free NHTSA public API (api.nhtsa.gov). If you saved a VIN, it
+          is sent once to NHTSA’s VIN decoder so the app can use the exact model name NHTSA lists; the recall requests
+          themselves never contain the VIN. No name, account or other identifier is included. You can turn this off in
+          Settings with “Check NHTSA for recalls”, which stops every recall request, including the VIN decode. If you
+          tap “Check on nhtsa.gov”, your browser opens NHTSA’s website with your VIN filled in; that visit is between
+          you and NHTSA.
         </li>
         <li>
           <strong>Install notification.</strong> Once per install (retried later if it fails), the app sends the
@@ -93,7 +102,7 @@ const path = '/privacy/';
         <li>No advertising SDKs or ad tracking.</li>
         <li>No user profiling.</li>
         <li>No cookies or web beacons.</li>
-        <li>No data is sold. Data is shared only with the service providers described in this policy (Google and Firebase, NHTSA for VIN lookups, and Resend for the install notification).</li>
+        <li>No data is sold. Data is shared only with the service providers described in this policy (Google and Firebase, NHTSA for VIN lookups and recall checks, and Resend for the install notification).</li>
         <li>No collection of names, email addresses or phone numbers.</li>
         <li>No account: no sign-up, no login.</li>
       </ul>
